@@ -8,12 +8,13 @@ from PIL import Image
 # --- Config pagina ---
 st.set_page_config(page_title="AgriSmartPro – Quaderno Digitale (MVP)", page_icon="🌱", layout="wide")
 
-# --- Mostra logo se presente ---
-if os.path.exists("logo.png"):
-    logo = Image.open("logo.png")
-    st.image(logo, width=150)
+# --- Mostra logo (prima prova logo_agrismartpro.png, poi logo.png) ---
+if os.path.exists("logo_agrismartpro.png"):
+    st.image(Image.open("logo_agrismartpro.png"), width=150)
+elif os.path.exists("logo.png"):
+    st.image(Image.open("logo.png"), width=150)
 else:
-    st.warning("Logo non trovato. Assicurati che il file 'logo.png' sia nel repository principale.")
+    st.warning("Logo non trovato. Carica 'logo_agrismartpro.png' o 'logo.png' nella root del repository.")
 
 # --- Titolo e descrizione ---
 st.title("AgriSmartPro – Quaderno Digitale (MVP)")
