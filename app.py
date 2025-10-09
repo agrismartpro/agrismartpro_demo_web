@@ -6,6 +6,7 @@ import streamlit as st
 from fpdf import FPDF
 st.set_page_config(page_title="AgriSmartPro 🌿 – Quaderno Digitale", page_icon="🌿", layout="wide")
 st.title("🌿 AgriSmartPro – Quaderno Digitale (MVP)")
+st.image("https://raw.githubusercontent.com/agrismartpro/agrismartpro_demo_web/main/data/logo_agrismartpro.png", width=120)
 st.caption("Versione demo pubblica: gestione Trattamenti, Magazzino e Fertilizzazioni con esportazione in PDF. Powered by Streamlit.")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 os.makedirs(DATA_DIR, exist_ok=True)
