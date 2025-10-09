@@ -1,14 +1,26 @@
-
 import json, os
 from datetime import date
 import pandas as pd
 import streamlit as st
 from fpdf import FPDF
-st.set_page_config(page_title="AgriSmartPro 🌿 – Quaderno Digitale", page_icon="🌿", layout="wide")
-st.title("🌿 AgriSmartPro – Quaderno Digitale (MVP)")
-st.image("https://raw.githubusercontent.com/agrismartpro/agrismartpro_demo_web/main/data/logo_agrismartpro.png", width=120)
+from PIL import Image
+
+# --- Config pagina ---
+st.set_page_config(page_title="AgriSmartPro – Quaderno Digitale (MVP)", page_icon="🌱", layout="wide")
+
+# --- Mostra logo se presente ---
+if os.path.exists("logo.png"):
+    logo = Image.open("logo.png")
+    st.image(logo, width=150)
+else:
+    st.warning("Logo non trovato. Assicurati che il file 'logo.png' sia nel repository principale.")
+
+# --- Titolo e descrizione ---
+st.title("AgriSmartPro – Quaderno Digitale (MVP)")
 st.caption("Versione demo pubblica: gestione Trattamenti, Magazzino e Fertilizzazioni con esportazione in PDF. Powered by Streamlit.")
-DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+
+# --- Percorsi file ---
+DATA_DIR = os.path.join(os.path.dirname(_file_), "data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 FILES = {
@@ -27,7 +39,6 @@ def load_json(path):
             return json.load(f)
         except json.JSONDecodeError:
             return []
-
 def save_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
