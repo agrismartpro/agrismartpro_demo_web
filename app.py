@@ -4,8 +4,9 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 from fpdf import FPDF
-st.set_page_config(page_title="AgriSmartPro – Demo Web", page_icon="🌾", layout="wide")
-
+st.set_page_config(page_title="AgriSmartPro 🌿 – Quaderno Digitale", page_icon="🌿", layout="wide")
+st.title("🌿 AgriSmartPro – Quaderno Digitale (MVP)")
+st.caption("Versione demo pubblica: gestione Trattamenti, Magazzino e Fertilizzazioni con esportazione in PDF. Powered by Streamlit.")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
