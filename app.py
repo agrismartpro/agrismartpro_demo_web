@@ -20,7 +20,7 @@ st.title("AgriSmartPro – Quaderno Digitale (MVP)")
 st.caption("Versione demo pubblica: gestione Trattamenti, Magazzino e Fertilizzazioni con esportazione in PDF. Powered by Streamlit.")
 
 # --- Percorsi file ---
-DATA_DIR = os.path.join(os.path.dirname(_file_), "data")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 FILES = {
