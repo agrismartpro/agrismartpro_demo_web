@@ -1,0 +1,16 @@
+[
+  {
+    "prodotto": "Pulsar 40",
+    "lotto": "L2025A",
+    "unita": "L",
+    "giacenza": 20,
+    "costo_unitario": 18.5
+  },
+  {
+    "prodotto": "Urea 46%",
+    "lotto": "U46-09",
+    "unita": "kg",
+    "giacenza": 500,
+    "costo_unitario": 0.75
+  }
+]

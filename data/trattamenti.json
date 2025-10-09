@@ -1,0 +1,20 @@
+[
+  {
+    "data": "2025-09-30",
+    "campo": "Riso 001",
+    "prodotto": "Pulsar 40",
+    "dose_l_ha": 1.2,
+    "ettari": 5,
+    "operatore": "Gianfranco",
+    "note": ""
+  },
+  {
+    "data": "2025-10-09",
+    "campo": "campo 1",
+    "prodotto": "clinch",
+    "dose_l_ha": 0.9999999999999999,
+    "ettari": 0.9999999999999999,
+    "operatore": "gf",
+    "note": ""
+  }
+]
