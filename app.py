@@ -22,7 +22,7 @@ st.title("🌾 AgriSmartPro – Demo Web")
 with st.expander("🔧 Debug (clicca per aprire)"):
     st.write("DATA_DIR:", str(DATA_DIR))
     try:
-        st.write("File presenti:", [p.name for p in DATA_DIR.glob("*.json")])
+        st.write("File presenti:", [p.name for p in DATA_DIR.glob('*.json')])
     except Exception as e:
         st.write("Errore nel leggere la cartella dati:", e)
 
