@@ -4,6 +4,20 @@ import pandas as pd
 import streamlit as st
 from fpdf import FPDF
 import unicodedata
+import streamlit as st
+
+# --- META INFO (SEO + titolo finestra) ---
+st.set_page_config(
+    page_title="AgriSmartPro – Gestione Agricola Intelligente | Smart Farming Platform",
+    page_icon="🌾",
+    layout="wide",
+)
+
+# --- DESCRIZIONE SEO (Google + Social Preview) ---
+st.markdown("""
+<meta name="description" content="AgriSmartPro è la piattaforma agricola intelligente che ottimizza trattamenti, fertilizzazioni e magazzino. Semplice, conforme al quaderno di campagna digitale, con AI integrata. 
+AgriSmartPro is the smart farming platform that optimizes treatments, fertilizations, and inventory. Easy, compliant with the digital field record, and powered by AI.">
+""", unsafe_allow_html=True)
 def fmt(x, n=2):
     try:
         return f"{float(x):.{n}f}"
