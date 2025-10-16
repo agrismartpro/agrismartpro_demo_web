@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Base directory robusta: se _file_ non esiste, usa la working dir
 BASE_DIR = Path(_file).parent if "file_" in globals() else Path.cwd()
-DATA_DIR = BASE_DIR / "dati"
+DATA_DIR = BASE_DIR / "data"
 
 def load_json(nome_file, default):
     path = DATA_DIR / nome_file
