@@ -30,17 +30,20 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.subheader("📘 Fertilizzazioni")
-    fert = load_json("fertilizzazioni.json", {"records": []}).get("records", [])
+    data = load_json("fertilizzazioni.json", {"records": []})
+    fert = data["records"] if isinstance(data, dict) else data
     st.dataframe(pd.DataFrame(fert))
 
 with col2:
     st.subheader("🌱 Trattamenti")
-    tratt = load_json("trattamenti.json", {"records": []}).get("records", [])
+    data = load_json("trattamenti.json", {"records": []})
+    tratt = data["records"] if isinstance(data, dict) else data
     st.dataframe(pd.DataFrame(tratt))
 
 with col3:
     st.subheader("🏷 Magazzino")
-    mag = load_json("magazzino.json", {"prodotti": []}).get("prodotti", [])
+    data = load_json("magazzino.json", {"prodotti": []})
+    mag = data["prodotti"] if isinstance(data, dict) else data
     st.dataframe(pd.DataFrame(mag))
 
 st.markdown("---")
