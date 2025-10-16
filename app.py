@@ -15,7 +15,7 @@ def load_json(nome_file, default):
         return default
 
 # Titolo pagina
-st.title("🌾 AgriSmartPro – Demo Web")
+st.title("🌾 AgriSmartPro – Demo Web") 
 
 # Sezioni
 col1, col2, col3 = st.columns(3)
