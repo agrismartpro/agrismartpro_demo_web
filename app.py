@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(page_title="AgriSmartPro – Demo Web", layout="wide")
 
 # Percorsi
-DATA_DIR = os.path.join(os.path.dirname(_file_), "dati")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "dati")
 
 def load_json(nome_file, default):
     path = os.path.join(DATA_DIR, nome_file)
