@@ -1,16 +1,15 @@
-import streamlit as st
-import json, os
-import pandas as pd
+import os
+from pathlib import Path
 
-st.set_page_config(page_title="AgriSmartPro – Demo Web", layout="wide")
-
-# Percorsi
-DATA_DIR = os.path.join(os.path.dirname(__file__), "dati")
+# Base directory robusta: se _file_ non esiste, usa la working dir
+BASE_DIR = Path(_file).parent if "file_" in globals() else Path.cwd()
+DATA_DIR = BASE_DIR / "dati"
 
 def load_json(nome_file, default):
-    path = os.path.join(DATA_DIR, nome_file)
+    path = DATA_DIR / nome_file
     try:
         with open(path, "r", encoding="utf-8") as f:
+            import json
             return json.load(f)
     except Exception:
         return default
