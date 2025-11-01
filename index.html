@@ -291,9 +291,9 @@
   style="
     position: relative;
     background:
-      linear-gradient(100deg, rgba(46,139,87,0.45) 0%, rgba(255,255,255,0.05) 100%),
+      linear-gradient(110deg, rgba(46,139,87,0.45) 0%, rgba(255,255,255,0.02) 60%),
       url('static/images/hero.jpg') center/cover no-repeat;
-    filter: brightness(1.08) contrast(1.05) saturate(1.12);
+    filter: brightness(1.03) saturate(1.05);
     min-height: 420px;
     border-radius: 26px;
     padding: 3.3rem 3rem;
@@ -307,7 +307,7 @@
     Gestione Agricola<br>Intelligente
   </h1>
 
-  <p style="max-width: 620px; font-size: 1.05rem; color: #0f172a; background: rgba(255,255,255,0.72); padding: 1rem 1.3rem; border-radius: 16px;">
+  <p style="max-width: 640px; font-size: 1.02rem; color: #0f172a; background: rgba(255,255,255,0.78); padding: 1rem 1.3rem; border-radius: 16px;">
     Ottimizza la gestione della tua azienda agricola con <strong>AgriSmartPro™</strong>:
     trattamenti, fertilizzazioni, magazzino e report in un’unica piattaforma semplice e conforme.
   </p>
@@ -318,11 +318,45 @@
       Inizia
     </a>
     <a href="https://agrismartpro.github.io"
+      target="_blank" rel="noopener"
       style="background:#fff; color:#2E8B57; padding:0.65rem 1.3rem; border-radius:999px; text-decoration:none; font-weight:600; border:1px solid rgba(46,139,87,0.16);">
       Visualizza demo
     </a>
   </div>
 </section>
+
+<style>
+/* responsive hero */
+@media (max-width: 900px) {
+  .hero {
+    padding: 2.2rem 1.4rem;
+    min-height: 360px;
+    background-position: center center;
+  }
+  .hero h1 {
+    font-size: 2.2rem !important;
+  }
+  .hero p {
+    font-size: 0.95rem !important;
+    max-width: 100% !important;
+  }
+  .hero div {
+    flex-direction: row;
+  }
+}
+@media (max-width: 540px) {
+  .hero {
+    border-radius: 0;
+  }
+  .hero div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero a {
+    width: auto;
+  }
+}
+</style>
 <!-- / HERO -->
   <!-- CARATTERISTICHE -->
   <section id="caratteristiche">
