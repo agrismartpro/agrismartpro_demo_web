@@ -1,485 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AgriSmartPro – Gestione Agricola Intelligente</title>
-  <meta name="description" content="AgriSmartPro è la piattaforma per gestire trattamenti, fertilizzazioni e magazzino in modo semplice, conforme e digitale.">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AgriSmartPro – Quaderno di campagna digitale</title>
   <style>
-    :root {
-      --green: #2E8B57;
-      --dark: #0f172a;
-      --light: #f8fafc;
-      --accent: #2563eb;
-      --danger: #b91c1c;
-      --radius: 14px;
-      --shadow: 0 12px 40px rgba(0,0,0,0.09);
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    body {
-      background: #fff;
-      color: #0f172a;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 20;
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(46,139,87,0.08);
-    }
-    .nav {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0.75rem 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .logo {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      font-weight: 700;
-      color: var(--green);
-      font-size: 1.05rem;
-    }
-    .menu {
-      display: flex;
-      gap: 1.3rem;
-      align-items: center;
-    }
-    .menu a {
-      text-decoration: none;
-      color: #0f172a;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    .btn-small {
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      border: none;
-      background: var(--green);
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    /* HERO */
-    .hero {
-      background-image: linear-gradient(180deg, rgba(46,139,87,0.0), rgba(255,255,255,1)), url("https://images.unsplash.com/photo-1533659828870-95ee305cee43?q=80&w=1800&auto=format&fit=crop");
-      background-size: cover;
-      background-position: center;
-      min-height: 72vh;
-      display: flex;
-      align-items: center;
-    }
-    .hero-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 4.5rem 1.2rem 3.5rem;
-      display: grid;
-      grid-template-columns: 1.05fr 0.85fr;
-      gap: 3rem;
-    }
-    .hero-left h1 {
-      font-size: clamp(2.4rem, 4.3vw, 3.4rem);
-      line-height: 1.05;
-      margin-bottom: 1rem;
-      color: #fff;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .hero-left p {
-      font-size: 1rem;
-      color: #e2e8f0;
-      max-width: 540px;
-      margin-bottom: 1.4rem;
-      text-shadow: 0 4px 18px rgba(0,0,0,0.25);
-    }
-    .hero-badges {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 999px;
-      padding: 0.3rem 0.8rem;
-      color: #fff;
-      font-size: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: #fff;
-      color: #0f172a;
-      border-radius: 999px;
-      border: none;
-      padding: 0.65rem 1.3rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.15);
-    }
-    .btn-secondary {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: #fff;
-      border-radius: 999px;
-      padding: 0.6rem 1.1rem;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    /* SECTIONS */
-    section {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 4rem 1.2rem;
-    }
-    .section-title {
-      font-size: 2rem;
-      margin-bottom: 0.4rem;
-    }
-    .section-sub {
-      color: #64748b;
-      margin-bottom: 2rem;
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.6rem;
-    }
-    .card {
-      background: #fff;
-      border-radius: 1rem;
-      padding: 1.4rem 1.3rem 1.2rem;
-      border: 1px solid rgba(15,23,42,0.03);
-      box-shadow: 0 18px 35px rgba(15,23,42,0.03);
-    }
-    .card h3 {
-      margin-bottom: 0.6rem;
-      color: #0f172a;
-    }
-    .card p {
-      color: #475569;
-      font-size: 0.9rem;
-    }
-    /* PRICING */
-    .pricing-wrap {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      align-items: stretch;
-    }
-    .price-card {
-      background: #fff;
-      border-radius: 1rem;
-      border: 1px solid rgba(15,23,42,0.03);
-      padding: 1.5rem 1.4rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.03);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .price-card.popular {
-      border: 1.7px solid rgba(46,139,87,0.35);
-      transform: translateY(-4px);
-    }
-    .price-badge {
-      font-size: 0.75rem;
-      background: rgba(46,139,87,0.08);
-      color: #0f172a;
-      padding: 0.35rem 0.6rem;
-      border-radius: 999px;
-      width: fit-content;
-    }
-    .price {
-      font-size: 1.7rem;
-      font-weight: 700;
-    }
-    .features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .features li::before {
-      content: "✓";
-      color: var(--green);
-      margin-right: 0.4rem;
-    }
-    /* CONTACT */
-    .contact-box {
-      background: #fff;
-      border-radius: 1rem;
-      padding: 1.5rem 1.4rem;
-      box-shadow: 0 18px 35px rgba(15,23,42,0.03);
-      max-width: 580px;
-    }
-    .contact-box label {
-      display: block;
-      margin-bottom: 0.25rem;
-      font-weight: 500;
-    }
-    .contact-box input, .contact-box textarea {
-      width: 100%;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.55rem;
-      padding: 0.55rem 0.5rem;
-      margin-bottom: 0.8rem;
-      font-size: 0.9rem;
-    }
-    footer {
-      background: #0f172a;
-      color: rgba(255,255,255,0.7);
-      text-align: center;
-      padding: 1.05rem;
-      font-size: 0.78rem;
-      margin-top: 2rem;
-    }
-    @media (max-width: 860px) {
-      .hero-inner {
-        grid-template-columns: 1fr;
-      }
-      .menu {
-        gap: 0.65rem;
-      }
-      .hero-left h1 {
-        font-size: 2.5rem;
-      }
-    }
+    :root{--green:#2E8B57;--bg:#f7f8f8;--text:#1f2428}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#fff}
+    header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff}
+    .logo{font-weight:800;color:var(--green)}
+    nav a{margin:0 10px;text-decoration:none;color:#444}
+    .btn{display:inline-block;padding:.9rem 1.2rem;border-radius:999px;font-weight:700;text-decoration:none}
+    .btn-primary{background:var(--green);color:#fff}
+    .btn-outline{border:2px solid var(--green);color:var(--green);background:transparent}
+    .hero{padding:64px 20px}
+    .hero-inner{max-width:980px;margin:0 auto;text-align:center}
+    h1{font-size:38px;line-height:1.2;margin:0 0 12px}
+    .sub{font-size:18px;color:#444;margin:0 0 22px}
+    .cta a{margin:0 8px}
+    section{padding:48px 20px}
+    .features,.pricing{max-width:980px;margin:0 auto}
+    .features-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:18px}
+    .f{background:#fff;border:1px solid #eee;border-radius:12px;padding:18px}
+    #prezzi{background:var(--bg)}
+    .cards{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:18px}
+    .card{background:#fff;border:1px solid #e7e7e7;border-radius:14px;padding:22px}
+    .card.highlight{background:#E9F5EE;border-color:#cfe9db}
+    .price{font-size:28px;font-weight:800;margin:6px 0 12px}
+    .price span{font-size:14px;color:#666;font-weight:600}
+    .card ul{padding-left:18px;margin:0 0 12px}
+    .note{font-size:12px;color:#666;margin-top:8px}
+    footer{border-top:1px solid #eee;padding:22px 20px;text-align:center;color:#556}
+    .small{font-size:13px;color:#555}
   </style>
 </head>
 <body>
-<!-- Pulsante Abbonati AgriSmartPro -->
-<div style="text-align:center; margin-top:30px; margin-bottom:30px;">
-  <a href="https://buy.stripe.com/aFa14g4rM4ILbTn7NG6Ri00" target="_blank" style="
-    background-color:#2E8B57;
-    color:white;
-    padding:14px 28px;
-    border-radius:6px;
-    text-decoration:none;
-    font-weight:bold;
-    font-family:Arial, sans-serif;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-  ">
-    💚 Abbonati a AgriSmartPro – Beta (50€/mese)
-  </a>
-</div>
-  <!-- NAVBAR -->
-  <header>
-    <div class="nav">
-      <div class="logo">AgriSmartPro™</div>
-      <div class="menu">
-        <a href="#caratteristiche">Caratteristiche</a>
-        <a href="#prezzi">Prezzi</a>
-        <a href="#contatto">Contatto</a>
+
+<header>
+  <div class="logo">AgriSmartPro™</div>
+  <nav>
+    <a href="#come-funziona">Caratteristiche</a>
+    <a href="#prezzi">Prezzi</a>
+    <a href="#contatto">Contatto</a>
+  </nav>
+  <a class="btn btn-primary" href="https://buy.stripe.com/aFAl4g4rM4lLb7mN6GRi00">Abbonati – Beta (50 €/mese)</a>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Il quaderno di campagna digitale che semplifica la vita agli agricoltori.</h1>
+      <p class="sub">Trattamenti, fertilizzazioni e magazzino in un’unica piattaforma chiara, conforme e facile da usare.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#prezzi">Vedi prezzi</a>
+        <a class="btn btn-outline" href="https://agrismartappemoweb-frdglmb5wbgsge25tvnxjq.streamlit.app" target="_blank" rel="noopener">Prova la demo</a>
       </div>
     </div>
-  </header>
+  </section>
 
-  <!-- HERO -->
-  <!-- HERO -->
-<!-- HERO -->
-<section class="hero"
-  style="
-    position: relative;
-    background:
-      linear-gradient(110deg, rgba(46,139,87,0.45) 0%, rgba(255,255,255,0.02) 60%),
-      url('static/images/hero.jpg') center/cover no-repeat;
-    filter: brightness(1.03) saturate(1.05);
-    min-height: 420px;
-    border-radius: 26px;
-    padding: 3.3rem 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1.5rem;
-  ">
-  
-  <h1 style="font-size: 3rem; line-height: 1.05; color: #0f172a; max-width: 540px; font-weight: 700;">
-    Gestione Agricola<br>Intelligente
-  </h1>
-
-  <p style="max-width: 640px; font-size: 1.02rem; color: #0f172a; background: rgba(255,255,255,0.78); padding: 1rem 1.3rem; border-radius: 16px;">
-    Ottimizza la gestione della tua azienda agricola con <strong>AgriSmartPro™</strong>:
-    trattamenti, fertilizzazioni, magazzino e report in un’unica piattaforma semplice e conforme.
-  </p>
-
-  <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-    <a href="#contatto"
-      style="background:#2E8B57; color:#fff; padding:0.7rem 1.5rem; border-radius:999px; text-decoration:none; font-weight:600;">
-      Inizia
-    </a>
-    <a href="https://agrismartproweb-frdglmb5wbqsge2stvnqq.streamlit.app"
-       target="_blank" rel="noopener"
-       style="background:#fff; color:#2E8B57; padding:0.65rem 1.3rem; border-radius:999px;
-              text-decoration:none; font-weight:600; border:1px solid rgba(46,139,87,0.16);">
-      Visualizza demo
-    </a>
-      target="_blank" rel="noopener"
-      style="background:#fff; color:#2E8B57; padding:0.65rem 1.3rem; border-radius:999px; text-decoration:none; font-weight:600; border:1px solid rgba(46,139,87,0.16);">
-      Visualizza demo
-    </a>
-  </div>
-</section>
-
-<style>
-/* responsive hero */
-@media (max-width: 900px) {
-  .hero {
-    padding: 2.2rem 1.4rem;
-    min-height: 360px;
-    background-position: center center;
-  }
-  .hero h1 {
-    font-size: 2.2rem !important;
-  }
-  .hero p {
-    font-size: 0.95rem !important;
-    max-width: 100% !important;
-  }
-  .hero div {
-    flex-direction: row;
-  }
-}
-@media (max-width: 540px) {
-  .hero {
-    border-radius: 0;
-  }
-  .hero div {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .hero a {
-    width: auto;
-  }
-}
-</style>
-<!-- / HERO -->
-<!-- DEMO INTEGRATA (versione pulita) -->
-<section id="demo" style="padding: 3rem 0 2.5rem 0; background: #f8fafc;">
-  <div style="max-width: 1180px; margin: 0 auto; padding: 0 1.5rem;">
-    <h2 style="font-size: 2rem; margin-bottom: 0.5rem; color: #0f172a;">
-      Prova la demo di AgriSmartPro
-    </h2>
-    <p style="margin-bottom: 1.5rem; color: #475569;">
-      Versione dimostrativa: trattamenti, fertilizzazioni, magazzino e export.
-    </p>
-
-    <div style="background:#fff; border:1px solid rgba(46,139,87,0.12); border-radius:14px; padding:2rem 1.5rem; text-align:center;">
-      <p style="margin-bottom:1rem; color:#64748b;">
-        La demo viene aperta su Streamlit.
-      </p>
-      <a href="https://agrismartproweb-frdglmb5wbqsge2stvnqq.streamlit.app"
-         target="_blank" rel="noopener"
-         style="display:inline-block; background:#2E8B57; color:#fff; padding:0.75rem 1.8rem; border-radius:999px; text-decoration:none; font-weight:600;">
-        Apri la demo
-      </a>
-      <p style="margin-top:1rem; font-size:0.8rem; color:#94a3b8;">
-        Se non si apre, controlla di essere connessa con l’account giusto su Streamlit.
-      </p>
-    </div>
-  </div>
-</section>
-<!-- / DEMO INTEGRATA -->
   <!-- CARATTERISTICHE -->
-  <section id="caratteristiche">
-    <h2 class="section-title">Tutto quello che serve in campo</h2>
-    <p class="section-sub">Pensato per aziende agricole, contoterzisti e tecnici che vogliono lavorare digitale.</p>
-    <div class="cards">
-      <div class="card">
-        <h3>Registro trattamenti</h3>
-        <p>Inserisci data, coltura, prodotto e dose. Il sistema è pronto per l’export e i controlli.</p>
-      </div>
-      <div class="card">
-        <h3>Fertilizzazioni</h3>
-        <p>Piani di concimazione collegati al magazzino. Sai sempre quanto prodotto resta.</p>
-      </div>
-      <div class="card">
-        <h3>Magazzino</h3>
-        <p>Giacenze aggiornate automaticamente dopo ogni trattamento o acquisto.</p>
-      </div>
-      <div class="card">
-        <h3>Export PDF</h3>
-        <p>Report puliti da condividere con tecnico, consorzio o controlli.</p>
+  <section id="come-funziona">
+    <div class="features">
+      <h2>Tutto quello che serve in campo, in modo semplice</h2>
+      <div class="features-grid">
+        <div class="f"><strong>🧾 Registro trattamenti</strong><br/>Inserisci data, coltura e prodotto. Il sistema si occupa dei controlli e dell’export.</div>
+        <div class="f"><strong>🌱 Fertilizzazioni</strong><br/>Piani di concimazione collegati al magazzino. Sai sempre quanto prodotto resta.</div>
+        <div class="f"><strong>📦 Magazzino</strong><br/>Giacenze aggiornate automaticamente dopo ogni trattamento o acquisto.</div>
+        <div class="f"><strong>📄 Export PDF</strong><br/>Report puliti e pronti per tecnico, consorzio o controlli.</div>
       </div>
     </div>
   </section>
 
   <!-- PREZZI -->
   <section id="prezzi">
-    <h2 class="section-title">Quanto costa?</h2>
-    <p class="section-sub">Stiamo partendo in modalità demo e raccolta feedback. Ecco i piani previsti.</p>
-    <div class="pricing-wrap">
-      <div class="price-card">
-        <span class="price-badge">Demo attuale</span>
-        <h3>AgriSmartPro Demo</h3>
-        <p class="price">0 €</p>
-        <p>Per provare il sistema e inviarci i tuoi dati reali.</p>
-        <ul class="features">
-          <li>Accesso alla demo web</li>
-          <li>Trattamenti e Magazzino</li>
-          <li>Salvataggio su file JSON</li>
-          <li>Supporto via email</li>
-        </ul>
-        <a class="btn-primary" href="https://agrismartappmoweeb-frdgImb5wbqsgse25tvnxjq.streamlit.app" target="_blank" rel="noopener">Apri la demo</a>
-      </div>
-      <div class="price-card popular">
-        <span class="price-badge">Prossimo rilascio</span>
-        <h3>AgriSmartPro Pro</h3>
-        <p class="price">50 €/mese</p>
-        <p>Quaderno di campagna digitale completo per azienda.</p>
-        <ul class="features">
-          <li>Esportazioni PDF</li>
-          <li>Magazzino avanzato</li>
-          <li>Moduli aggiuntivi (assicurazioni, insight)</li>
-          <li>Supporto prioritario</li>
-        </ul>
-        <a class="btn-primary" href="#contatto">Prenota posto</a>
+    <div class="pricing">
+      <h2>Scegli la versione che fa per te</h2>
+      <div class="cards">
+        <!-- DEMO -->
+        <div class="card">
+          <h3>AgriSmartPro Demo</h3>
+          <div class="price">0 €</div>
+          <ul>
+            <li>Accesso alla demo web</li>
+            <li>Trattamenti, Fertilizzazioni, Magazzino</li>
+            <li>Salvataggio su file JSON</li>
+            <li>Supporto via email</li>
+          </ul>
+          <a class="btn btn-outline" href="https://agrismartappemoweb-frdglmb5wbgsge25tvnxjq.streamlit.app" target="_blank" rel="noopener">Apri la demo</a>
+        </div>
+
+        <!-- PRO MENSILE -->
+        <div class="card highlight">
+          <h3>AgriSmartPro Pro</h3>
+          <div class="price">50 € <span>/ mese</span></div>
+          <ul>
+            <li>Quaderno di campagna completo</li>
+            <li>Esportazioni PDF</li>
+            <li>Magazzino avanzato</li>
+            <li>Moduli futuri (Assicurazioni, Insight AI)</li>
+            <li>Supporto prioritario</li>
+          </ul>
+          <a class="btn btn-primary" href="https://buy.stripe.com/aFAl4g4rM4lLb7mN6GRi00">Abbonati ora</a>
+          <p class="note">Prova gratuita 15 giorni (opzionale). Disdici quando vuoi.</p>
+        </div>
+
+        <!-- ANNUAL PASS -->
+        <div class="card">
+          <h3>Annual Pass</h3>
+          <div class="price">500 € <span>/ anno</span></div>
+          <ul>
+            <li>Tutto il Pro per 12 mesi</li>
+            <li><strong>Risparmi 100 €</strong></li>
+            <li><strong>Paga anche in 3 rate con Klarna</strong></li>
+          </ul>
+          <a class="btn btn-primary" href="https://buy.stripe.com/cN114g8ube879qar6b">Paga in 3 rate con Klarna</a>
+          <p class="note">Pagamento una-tantum. 12 mesi di accesso. Nessun rinnovo automatico.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- CONTATTO -->
   <section id="contatto">
-    <h2 class="section-title">Vuoi provarlo con i tuoi dati?</h2>
-    <p class="section-sub">Scrivici e ti abilitiamo alla raccolta dati reale (campi, trattamenti, fertilizzazioni).</p>
-    <div class="contact-box">
-      <form action="mailto:info@agrismartpro.com" method="post" enctype="text/plain">
-        <label for="nome">Nome e azienda</label>
-        <input type="text" id="nome" name="nome" placeholder="Es. Azienda Agricola Rossi" required>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="tuoindirizzo@email.it" required>
-        <label for="msg">Messaggio</label>
-        <textarea id="msg" name="messaggio" rows="4" placeholder="Raccontaci che colture hai, se fai riso, mais, soia..."></textarea>
-        <button class="btn-primary" type="submit">Invia richiesta</button>
-      </form>
-      <p style="margin-top:0.7rem;font-size:0.8rem;color:#475569;">
-        Oppure scrivi direttamente a <a href="mailto:info@agrismartpro.com">info@agrismartpro.com</a>
-      </p>
+    <div class="features" style="max-width:720px">
+      <h2>Vuoi provarlo con i dati della tua azienda?</h2>
+      <p class="small">Scrivici e abiliteremo la tua versione personalizzata con i tuoi campi, trattamenti e fertilizzazioni.</p>
+      <p class="small">Email: <a href="mailto:info@agrismartpro.com">info@agrismartpro.com</a></p>
     </div>
   </section>
+</main>
 
-  <footer>
-    © 2025 AgriSmartPro™ – Quaderno di campagna intelligente. Tutti i diritti riservati.
-  </footer>
+<footer>
+  <div>© 2025 AgriSmartPro™ – L’intelligenza agricola italiana.</div>
+  <div class="small">LinkedIn · Instagram · TikTok</div>
+</footer>
+
 </body>
 </html>
