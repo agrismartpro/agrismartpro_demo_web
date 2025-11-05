@@ -4,20 +4,6 @@ import pandas as pd
 import streamlit as st
 from fpdf import FPDF
 import unicodedata
-import streamlit as st
-
-# --- META INFO (SEO + titolo finestra) ---
-st.set_page_config(
-    page_title="AgriSmartPro – Gestione Agricola Intelligente | Smart Farming Platform",
-    page_icon="🌾",
-    layout="wide",
-)
-
-# --- DESCRIZIONE SEO (Google + Social Preview) ---
-st.markdown("""
-<meta name="description" content="AgriSmartPro è la piattaforma agricola intelligente che ottimizza trattamenti, fertilizzazioni e magazzino. Semplice, conforme al quaderno di campagna digitale, con AI integrata. 
-AgriSmartPro is the smart farming platform that optimizes treatments, fertilizations, and inventory. Easy, compliant with the digital field record, and powered by AI.">
-""", unsafe_allow_html=True)
 def fmt(x, n=2):
     try:
         return f"{float(x):.{n}f}"
@@ -369,7 +355,15 @@ with tabs[0]:
 # --- Magazzino ---
 with tabs[1]:
     st.subheader("Magazzino fitosanitari/fertilizzanti")
-    dati = load_json(FILES["magazzino"])
+
+    raw_mag = load_json(FILES["magazzino"])
+
+    # ✅ compatibilità tra formato desktop ({"prodotti": [...]}) e web (lista [])
+    if isinstance(raw_mag, dict):
+        dati = raw_mag.get("prodotti", [])
+    else:
+        dati = raw_mag
+
     df = pd.DataFrame(dati)
     st.dataframe(df, use_container_width=True)
     with st.expander("➕ Aggiungi/aggiorna voce di magazzino"):
