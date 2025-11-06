@@ -465,7 +465,51 @@ with tabs[1]:
 
             st.success("Campi puliti ✅")
             st.rerun()
+# --- BOLLA DI RESO ---
+st.divider()
+st.subheader("Bolla di reso")
 
+mag = load_json(FILES["magazzino"])
+nomi_prodotti = [p.get("nome","") for p in mag.get("prodotti", [])]
+
+with st.form("form_reso", clear_on_submit=True):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        data_reso = st.date_input("Data reso")
+    with col2:
+        prodotto_sel = st.selectbox("Prodotto", options=(nomi_prodotti or ["(scrivi nome nuovo)"]))
+        nuovo_nome = st.text_input("Oppure inserisci nome", value="")
+        prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else prodotto_sel
+    with col3:
+        quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=1.0)
+
+    col4, col5 = st.columns(2)
+    with col4:
+        operatore_reso = st.text_input("Operatore", value="")
+    with col5:
+        note_reso = st.text_input("Note", value="")
+
+    if st.form_submit_button("✔ Registra reso"):
+        if not prodotto_finale or float(quantita_reso) <= 0:
+            st.error("Inserisci un prodotto valido e una quantità > 0.")
+        else:
+            registra_reso(
+                prodotto=prodotto_finale,
+                quantita=quantita_reso,
+                data_iso=str(data_reso),
+                operatore=operatore_reso,
+                note=note_reso
+            )
+            st.success(f"Reso registrato: +{quantita_reso} a magazzino per '{prodotto_finale}'.")
+            st.rerun()
+
+# elenco resi registrati (utile per verifica)
+st.caption("Resi registrati")
+try:
+    import pandas as pd
+    st.dataframe(pd.DataFrame(load_json(FILES["resi"])), use_container_width=True)
+except Exception:
+    st.write(load_json(FILES["resi"]))
 # --- Fertilizzazioni ---
 with tabs[2]:
     st.subheader("Registro fertilizzazioni")
