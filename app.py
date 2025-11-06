@@ -100,15 +100,17 @@ def _save_magazzino_list(prod_list, wrap):
 def registra_reso(nome, lotto, unita, quantita, data_iso, operatore, note, segno=1):
     """
     Registra un reso aggiornando la GIACENZA del prodotto giusto
-    (match su nome+lotto+unità) e aggiunge la riga nel file 'resi'.
-    segno: +1 = rientro in magazzino, -1 = reso a fornitore (scarico).
+    (match su nome + lotto + unita) e aggiunge la riga nel file 'resi'.
+    segno = +1 per rientro in magazzino, -1 per reso a fornitore (scarico)
     """
+
+    # --- Carica il magazzino ---
     prod_list, wrap = _load_magazzino_list()
 
-    # trova riga esatta su nome+lotto+unita (normalizzati)
+    # Trova la riga esatta su nome+lotto+unità (normalizzati)
     idx = _find_index(prod_list, nome, lotto, unita)
 
-    # se non esiste, crea riga coerente
+    # Se non esiste, crea una nuova riga coerente
     if idx is None:
         prod_list.append({
             "nome": nome.strip(),
@@ -119,19 +121,20 @@ def registra_reso(nome, lotto, unita, quantita, data_iso, operatore, note, segno
         })
         idx = len(prod_list) - 1
 
-    # aggiorna GIACENZA (rispettando il segno)
+    # --- Aggiorna la GIACENZA rispettando il segno ---
     nuova = float(prod_list[idx].get("giacenza", 0.0)) + segno * float(quantita)
     if nuova < 0:
-        nuova = 0.0  # evita negativi
+        nuova = 0.0  # evita valori negativi
     prod_list[idx]["giacenza"] = nuova
 
-    # salva magazzino (nel formato originale)
+    # --- Salva il magazzino aggiornato ---
     _save_magazzino_list(prod_list, wrap)
 
-    # registra la riga nel file resi
+    # --- Registra la riga nel file 'resi' ---
     resi = load_json(FILES["resi"])
     if not isinstance(resi, list):
         resi = []
+
     resi.append({
         "data": data_iso,
         "prodotto": nome.strip(),
@@ -141,6 +144,7 @@ def registra_reso(nome, lotto, unita, quantita, data_iso, operatore, note, segno
         "operatore": operatore or "",
         "note": note or "",
     })
+
     save_json(FILES["resi"], resi)
 # --- LOG SEMPLICE ---
 import datetime
