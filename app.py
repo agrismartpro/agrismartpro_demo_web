@@ -95,7 +95,8 @@ def registra_reso(prodotto, quantita, data_iso, operatore, note):
         idx = len(prodotti) - 1
 
     # aggiorna solo la giacenza del prodotto trovato/creato
-    prodotti[idx]["giacenza"] = float(prodotti[idx]["giacenza"]) + float(quantita)
+    nuova_giac = float(prodotti[idx].get("giacenza", 0)) + segno * float(quantita)
+    prodotti[idx]["giacenza"] = max(0.0, nuova_giac)   # evita numeri negativi
 
     _save_magazzino_list(prodotti, wrap)
 
@@ -512,6 +513,13 @@ with st.form("form_reso", clear_on_submit=True):
         prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else prodotto_sel
     with col3:
         quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=1.0)
+        # scegli se il reso aumenta (+) o diminuisce (-) il magazzino
+        tipo_reso = st.selectbox(
+            "Tipo reso",
+            ["Rientro da campo (+ magazzino)", "Reso a fornitore (- magazzino)"],
+            index=0, key="m_tipo_reso"
+        )
+        segno = 1 if "Rientro" in tipo_reso else -1
 
     col4, col5 = st.columns(2)
     with col4:
@@ -529,6 +537,7 @@ with st.form("form_reso", clear_on_submit=True):
                 data_iso=str(data_reso),
                 operatore=operatore_reso,
                 note=note_reso
+                segno=segno
             )
             st.success(f"Reso registrato: +{quantita_reso} a magazzino per '{prodotto_finale}'.")
             st.rerun()
