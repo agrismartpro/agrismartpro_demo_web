@@ -77,37 +77,30 @@ def _save_magazzino_list(prod_list, wrap):
         save_json(FILES["magazzino"], {"prodotti": prod_list})
     else:
         save_json(FILES["magazzino"], prod_list)        
-def registra_reso(prodotto, quantita, data_iso, operatore, note):
+def registra_reso(prodotto, quantita, data_iso, operatore, note, segno=1):
     prodotti, wrap = _load_magazzino_list()
-
     tgt = _norm_name(prodotto)
     idx = next((i for i, p in enumerate(prodotti) if _norm_name(p["nome"]) == tgt), None)
 
     if idx is None:
-        # crea nuova riga coerente con lo schema unico
-        prodotti.append({
-            "nome": prodotto.strip(),
-            "lotto": "",
-            "unita": "kg",
-            "costo_unitario": 0.0,
-            "giacenza": 0.0
-        })
+        prodotti.append({"nome": prodotto.strip(), "lotto": "", "unita": "kg",
+                         "costo_unitario": 0.0, "giacenza": 0.0})
         idx = len(prodotti) - 1
 
-    # aggiorna solo la giacenza del prodotto trovato/creato
+    # usa il segno (+1 rientro, −1 reso a fornitore)
     nuova_giac = float(prodotti[idx].get("giacenza", 0)) + segno * float(quantita)
-    prodotti[idx]["giacenza"] = max(0.0, nuova_giac)   # evita numeri negativi
+    prodotti[idx]["giacenza"] = max(0.0, nuova_giac)
 
     _save_magazzino_list(prodotti, wrap)
 
-    # registra il movimento reso
+    # (facoltativo) registra anche il movimento nei resi.json come già facevi
     resi = load_json(FILES["resi"])
     if not isinstance(resi, list):
         resi = []
     resi.append({
         "data": data_iso,
         "prodotto": prodotti[idx]["nome"],
-        "quantita": float(quantita),
+        "quantita": float(quantita) * segno,   # utile per capire +/−
         "operatore": operatore or "",
         "note": note or ""
     })
