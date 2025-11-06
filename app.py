@@ -21,7 +21,8 @@ def safe_text(s):
         .encode("latin-1", "ignore").decode("latin-1")
     )
 st.set_page_config(page_title="AgriSmartPro – Demo Web", page_icon="🌾", layout="wide")
-
+import streamlit as st, datetime  # se già importati, lascia solo la riga sotto
+st.success(f"✅ VERSIONE NUOVA • BUILD: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
