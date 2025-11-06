@@ -61,7 +61,27 @@ def _normalize_record(p):
         "costo_unitario": float(p.get("costo_unitario", 0) or 0),
         "giacenza": float(p.get("giacenza", 0) or 0),
     }
+import re
 
+def _key_tuple(p):
+    # Chiave composta (nome, lotto, unita) normalizzata
+    return (
+        _norm_name(p.get("nome") or p.get("prodotto") or ""),
+        (p.get("lotto") or "").strip().lower(),
+        (p.get("unita") or "kg").strip().lower(),
+    )
+
+def _find_index(lst, nome, lotto, unita):
+    # Cerca l'indice di un prodotto nel magazzino in base alla chiave composta
+    tgt = (_norm_name(nome or ""), (lotto or "").strip().lower(), (unita or "kg").strip().lower())
+    for i, p in enumerate(lst):
+        if _key_tuple(p) == tgt:
+            return i
+    return None
+
+def _label_prodotto(p):
+    # Etichetta leggibile per la scelta prodotto
+    return f"{p.get('nome') or p.get('prodotto') or ''} | lotto {(p.get('lotto') or '-') } | {(p.get('unita') or 'kg')} | giacenza {p.get('giacenza', 0)}"
 def _load_magazzino_list():
     raw = load_json(FILES["magazzino"])
     if isinstance(raw, dict):
@@ -77,32 +97,49 @@ def _save_magazzino_list(prod_list, wrap):
         save_json(FILES["magazzino"], {"prodotti": prod_list})
     else:
         save_json(FILES["magazzino"], prod_list)        
-def registra_reso(prodotto, quantita, data_iso, operatore, note, segno=1):
-    prodotti, wrap = _load_magazzino_list()
-    tgt = _norm_name(prodotto)
-    idx = next((i for i, p in enumerate(prodotti) if _norm_name(p["nome"]) == tgt), None)
+def registra_reso(nome, lotto, unita, quantita, data_iso, operatore, note, segno=1):
+    """
+    Registra un reso aggiornando la GIACENZA del prodotto giusto
+    (match su nome+lotto+unità) e aggiunge la riga nel file 'resi'.
+    segno: +1 = rientro in magazzino, -1 = reso a fornitore (scarico).
+    """
+    prod_list, wrap = _load_magazzino_list()
 
+    # trova riga esatta su nome+lotto+unita (normalizzati)
+    idx = _find_index(prod_list, nome, lotto, unita)
+
+    # se non esiste, crea riga coerente
     if idx is None:
-        prodotti.append({"nome": prodotto.strip(), "lotto": "", "unita": "kg",
-                         "costo_unitario": 0.0, "giacenza": 0.0})
-        idx = len(prodotti) - 1
+        prod_list.append({
+            "nome": nome.strip(),
+            "lotto": lotto.strip(),
+            "unita": (unita or "kg").strip(),
+            "costo_unitario": float(0),
+            "giacenza": 0.0,
+        })
+        idx = len(prod_list) - 1
 
-    # usa il segno (+1 rientro, −1 reso a fornitore)
-    nuova_giac = float(prodotti[idx].get("giacenza", 0)) + segno * float(quantita)
-    prodotti[idx]["giacenza"] = max(0.0, nuova_giac)
+    # aggiorna GIACENZA (rispettando il segno)
+    nuova = float(prod_list[idx].get("giacenza", 0.0)) + segno * float(quantita)
+    if nuova < 0:
+        nuova = 0.0  # evita negativi
+    prod_list[idx]["giacenza"] = nuova
 
-    _save_magazzino_list(prodotti, wrap)
+    # salva magazzino (nel formato originale)
+    _save_magazzino_list(prod_list, wrap)
 
-    # (facoltativo) registra anche il movimento nei resi.json come già facevi
+    # registra la riga nel file resi
     resi = load_json(FILES["resi"])
     if not isinstance(resi, list):
         resi = []
     resi.append({
         "data": data_iso,
-        "prodotto": prodotti[idx]["nome"],
-        "quantita": float(quantita) * segno,   # utile per capire +/−
+        "prodotto": nome.strip(),
+        "lotto": lotto.strip(),
+        "unita": (unita or "").strip(),
+        "quantita": float(quantita) * segno,
         "operatore": operatore or "",
-        "note": note or ""
+        "note": note or "",
     })
     save_json(FILES["resi"], resi)
 # --- LOG SEMPLICE ---
@@ -444,11 +481,7 @@ with tabs[1]:
         # 1) SALVA
         if st.button("Salva magazzino", key="m_salva"):
 
-            esistente_idx = None
-            for i, r in enumerate(dati):
-                if r.get("prodotto") == prodotto and r.get("lotto") == lotto:
-                    esistente_idx = i
-                    break
+           esistente_idx = _find_index(dati, prodotto, lotto, unita)
 
             voce = {
                 "prodotto": prodotto.strip(),
@@ -507,16 +540,23 @@ else:
 def _nome(p):
     return str(p.get("prodotto") or p.get("nome") or "").strip()
 
-nomi_prodotti = [_nome(p) for p in prodotti if _nome(p)]
+def _label_prodotto(p):
+    nome = p.get("prodotto") or p.get("nome") or ""
+    lotto = p.get("lotto") or ""
+    unita = p.get("unita") or ""
+    giac = p.get("giacenza") or 0
+    return f"{nome} | Lotto: {lotto} | {unita} | Giacenza: {giac}"
+
+etichette_prodotti = [_label_prodotto(p) for p in prodotti]
 
 with st.form("form_reso", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
     with col1:
         data_reso = st.date_input("Data reso")
     with col2:
-        prodotto_sel = st.selectbox("Prodotto", options=(nomi_prodotti or ["(scrivi nome nuovo)"]))
+        prodotto_sel = st.selectbox("Prodotto", options=(etichette_prodotti or ["(scrivi nome nuovo)"]))
         nuovo_nome = st.text_input("Oppure inserisci nome", value="")
-        prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else prodotto_sel
+        prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else prodotto_sel.split("|")[0].strip()
     with col3:
         quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=1.0)
 
@@ -532,14 +572,26 @@ with st.form("form_reso", clear_on_submit=True):
         if not prodotto_finale or float(quantita_reso) <= 0:
             st.error("Inserisci un prodotto valido e una quantità > 0.")
         else:
+            # mappa etichetta -> record originale per estrarre lotto/unita
+            mappa = { _label_prodotto(p): p for p in prodotti }
+        
+            # prendi il record selezionato (se esiste)
+            rec_sel = mappa.get(prodotto_sel, {})
+            nome = (nuovo_nome.strip() if nuovo_nome.strip() else rec_sel.get("nome", prodotto_sel).strip())
+            lotto = rec_sel.get("lotto", "")
+            unita = rec_sel.get("unita", "kg")
+        
             registra_reso(
-                prodotto=prodotto_finale,
-                quantita=-abs(quantita_reso),  # toglie dal magazzino
+                nome=nome,
+                lotto=lotto,
+                unita=unita,
+                quantita=quantita_reso,
                 data_iso=str(data_reso),
                 operatore=operatore_reso,
-                note=note_reso
+                note=note_reso,
+                segno=segno   # +1 rientro, -1 reso a fornitore
             )
-            st.success(f"Reso registrato: -{quantita_reso} dal magazzino per '{prodotto_finale}' ✅")
+            st.success(f"Reso registrato: {('+' if segno>0 else '')}{quantita_reso} su '{nome}' (lotto {lotto}, {unita}).")
             st.rerun()
 
 # elenco resi registrati (utile per verifica)
