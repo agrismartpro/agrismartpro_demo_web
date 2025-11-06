@@ -4,6 +4,8 @@ import pandas as pd
 import streamlit as st
 from fpdf import FPDF
 import unicodedata
+import streamlit as st, datetime
+st.caption(f"DEMO • build {datetime.datetime.now():%Y-%m-%d %H:%M:%S}")
 def fmt(x, n=2):
     try:
         return f"{float(x):.{n}f}"
