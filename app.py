@@ -563,7 +563,15 @@ with st.form("form_reso", clear_on_submit=True):
         prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else prodotto_sel.split("|")[0].strip()
     with col3:
         quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=1.0)
-
+    # --- Tipo reso (decide se + o -) ---
+    tipo_reso = st.selectbox(
+        "Tipo reso",
+        ["Rientro da campo (+ magazzino)", "Reso a fornitore (- magazzino)"],
+        index=0,
+        key="m_tipo_reso",
+    )
+    
+    segno = +1 if "Rientro" in tipo_reso else -1
     col4, col5 = st.columns(2)
     with col4:
         operatore_reso = st.text_input("Operatore", value="")
