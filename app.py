@@ -49,6 +49,38 @@ def load_json(path):
 def save_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+def registra_reso(prodotto, quantita, data_iso, operatore, note):
+    # 1) +quantità in magazzino
+    mag = load_json(FILES["magazzino"])
+    if not mag or "prodotti" not in mag:
+        mag = {"prodotti": []}
+    prodotti = mag["prodotti"]
+
+    # cerca il prodotto per nome (case-insensitive)
+    idx = next((i for i, p in enumerate(prodotti)
+                if str(p.get("nome","")).lower() == str(prodotto).lower()), None)
+    if idx is None:
+        # se non esiste lo crea (unità di default kg)
+        prodotti.append({"nome": prodotto, "unita": "kg", "giacenza": 0})
+        idx = len(prodotti) - 1
+
+    giac = float(prodotti[idx].get("giacenza", 0))
+    giac += float(quantita)
+    prodotti[idx]["giacenza"] = giac
+    save_json(FILES["magazzino"], mag)
+
+    # 2) scrivi movimento in resi.json
+    resi = load_json(FILES["resi"])
+    if not isinstance(resi, list):
+        resi = []
+    resi.append({
+        "data": data_iso,
+        "prodotto": prodotto,
+        "quantita": float(quantita),
+        "operatore": operatore or "",
+        "note": note or ""
+    })
+    save_json(FILES["resi"], resi)        
 # --- LOG SEMPLICE ---
 import datetime
 def log(msg):
