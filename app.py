@@ -481,7 +481,7 @@ with tabs[1]:
         # 1) SALVA
         if st.button("Salva magazzino", key="m_salva"):
 
-           esistente_idx = _find_index(dati, prodotto, lotto, unita)
+            esistente_idx = _find_index(dati, prodotto, lotto, unita)
 
             voce = {
                 "prodotto": prodotto.strip(),
