@@ -469,8 +469,21 @@ with tabs[1]:
 st.divider()
 st.subheader("Bolla di reso")
 
-mag = load_json(FILES["magazzino"])
-nomi_prodotti = [p.get("nome","") for p in mag.get("prodotti", [])]
+raw = load_json(FILES["magazzino"])
+
+# Normalizza a lista di prodotti (supporta entrambi i formati)
+if isinstance(raw, dict):
+    prodotti = raw.get("prodotti", [])
+elif isinstance(raw, list):
+    prodotti = raw
+else:
+    prodotti = []
+
+# Prende il nome indipendentemente dal campo usato
+def _nome(p):
+    return str(p.get("prodotto") or p.get("nome") or "").strip()
+
+nomi_prodotti = [_nome(p) for p in prodotti if _nome(p)]
 
 with st.form("form_reso", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
