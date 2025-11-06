@@ -29,10 +29,14 @@ FILES = {
     "trattamenti": os.path.join(DATA_DIR, "trattamenti.json"),
     "magazzino": os.path.join(DATA_DIR, "magazzino.json"),
     "fertilizzazioni": os.path.join(DATA_DIR, "fertilizzazioni.json"),
+    "resi": os.path.join(DATA_DIR, "resi.json"),
     "azienda": os.path.join(DATA_DIR, "azienda.json"),
     "logo": os.path.join(DATA_DIR, "logo.png"),
 }
-
+# crea file vuoto se non esiste
+if not os.path.exists(FILES["resi"]):
+    with open(FILES["resi"], "w", encoding="utf-8") as f:
+        json.dump([], f, ensure_ascii=False, indent=2)
 def load_json(path):
     if not os.path.exists(path):
         return []
