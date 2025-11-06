@@ -536,7 +536,7 @@ with st.form("form_reso", clear_on_submit=True):
                 quantita=quantita_reso,
                 data_iso=str(data_reso),
                 operatore=operatore_reso,
-                note=note_reso
+                note=note_reso,
                 segno=segno
             )
             st.success(f"Reso registrato: +{quantita_reso} a magazzino per '{prodotto_finale}'.")
