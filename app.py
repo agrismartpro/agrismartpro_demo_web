@@ -63,17 +63,19 @@ def _normalize_record(p):
     }
 import re
 
+def _norm_name(s):
+    return str(s or "").strip().lower()
+
 def _key_tuple(p):
-    # Chiave composta (nome, lotto, unita) normalizzata
+    # chiave composta coerente: nome, lotto, unita
     return (
         _norm_name(p.get("nome") or p.get("prodotto") or ""),
-        (p.get("lotto") or "").strip().lower(),
-        (p.get("unita") or "kg").strip().lower(),
+        _norm_name(p.get("lotto") or p.get("lotto_v2") or ""),
+        _norm_name(p.get("unita") or "kg")
     )
 
 def _find_index(lst, nome, lotto, unita):
-    # Cerca l'indice di un prodotto nel magazzino in base alla chiave composta
-    tgt = (_norm_name(nome or ""), (lotto or "").strip().lower(), (unita or "kg").strip().lower())
+    tgt = (_norm_name(nome), _norm_name(lotto), _norm_name(unita))
     for i, p in enumerate(lst):
         if _key_tuple(p) == tgt:
             return i
