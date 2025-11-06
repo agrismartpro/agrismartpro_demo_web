@@ -644,6 +644,41 @@ with tabs[3]:
             st.image(FILES["logo"], width=150, caption="Logo attuale")                
 
 # --- Export ---
+def generate_resi_pdf(company, logo_path, rows):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 14)
+
+    # logo + intestazione
+    if os.path.exists(logo_path):
+        pdf.image(logo_path, x=10, y=8, w=25)
+        pdf.ln(18)
+    pdf.cell(0, 8, safe_text(f"Azienda: {company.get('ragione_sociale','')}"), ln=1)
+    pdf.cell(0, 8, "Bolle di reso", ln=1)
+    pdf.ln(4)
+
+    # intestazione tabella
+    headers = ["data", "prodotto", "quantita", "operatore", "note"]
+    colw = [28, 60, 25, 35, 40]
+    pdf.set_font("Arial", "B", 10)
+    for h, w in zip(headers, colw):
+        pdf.cell(w, 7, h, border=1)
+    pdf.ln()
+
+    # righe
+    pdf.set_font("Arial", "", 10)
+    for r in rows:
+        pdf.cell(colw[0], 6, str(r.get("data","")), border=1)
+        pdf.cell(colw[1], 6, safe_text(str(r.get("prodotto",""))), border=1)
+        pdf.cell(colw[2], 6, str(r.get("quantita","")), border=1, align="R")
+        pdf.cell(colw[3], 6, safe_text(str(r.get("operatore",""))), border=1)
+        pdf.cell(colw[4], 6, safe_text(str(r.get("note",""))), border=1)
+        pdf.ln()
+
+    out_path = os.path.join(DATA_DIR, "resi.pdf")
+    pdf.output(out_path)
+    return out_path
 with tabs[4]:
     st.subheader("Esportazioni")
     # --- PDF completo ---
@@ -781,4 +816,22 @@ with tabs[4]:
                 file_name="fertilizzazioni.pdf",
                 mime="application/pdf"
             )
-        st.success("PDF Fertilizzazioni generato.")    
+        st.success("PDF Fertilizzazioni generato.")
+    # --- PDF RESI ---
+    st.subheader("Esporta PDF Resi")
+    resi_rows = load_json(FILES["resi"])
+    comp = load_company()
+    
+    if not resi_rows:
+        st.info("Nessun reso registrato al momento.")
+    else:
+        if st.button("📄 Genera PDF resi", key="pdf_resi"):
+            pdf_path = generate_resi_pdf(comp, FILES["logo"], resi_rows)
+            with open(pdf_path, "rb") as f:
+                st.download_button(
+                    "⬇ Scarica resi.pdf",
+                    data=f.read(),
+                    file_name="resi.pdf",
+                    mime="application/pdf",
+                )
+            st.success("PDF Resi generato.")   
