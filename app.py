@@ -49,38 +49,68 @@ def load_json(path):
 def save_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-def registra_reso(prodotto, quantita, data_iso, operatore, note):
-    # 1) +quantità in magazzino
-    mag = load_json(FILES["magazzino"])
-    if not mag or "prodotti" not in mag:
-        mag = {"prodotti": []}
-    prodotti = mag["prodotti"]
+def _norm_name(s):
+    return str(s or "").strip().lower()
 
-    # cerca il prodotto per nome (case-insensitive)
-    idx = next((i for i, p in enumerate(prodotti)
-                if str(p.get("nome","")).lower() == str(prodotto).lower()), None)
+def _normalize_record(p):
+    nome = p.get("nome") or p.get("prodotto")
+    return {
+        "nome": str(nome or "").strip(),
+        "lotto": str(p.get("lotto") or p.get("lotto_v2") or ""),
+        "unita": (p.get("unita") or "kg"),
+        "costo_unitario": float(p.get("costo_unitario", 0) or 0),
+        "giacenza": float(p.get("giacenza", 0) or 0),
+    }
+
+def _load_magazzino_list():
+    raw = load_json(FILES["magazzino"])
+    if isinstance(raw, dict):
+        lst, wrap = raw.get("prodotti", []), True
+    elif isinstance(raw, list):
+        lst, wrap = raw, False
+    else:
+        lst, wrap = [], False
+    return [_normalize_record(p) for p in lst], wrap
+
+def _save_magazzino_list(prod_list, wrap):
+    if wrap:
+        save_json(FILES["magazzino"], {"prodotti": prod_list})
+    else:
+        save_json(FILES["magazzino"], prod_list)        
+def registra_reso(prodotto, quantita, data_iso, operatore, note):
+    prodotti, wrap = _load_magazzino_list()
+
+    tgt = _norm_name(prodotto)
+    idx = next((i for i, p in enumerate(prodotti) if _norm_name(p["nome"]) == tgt), None)
+
     if idx is None:
-        # se non esiste lo crea (unità di default kg)
-        prodotti.append({"nome": prodotto, "unita": "kg", "giacenza": 0})
+        # crea nuova riga coerente con lo schema unico
+        prodotti.append({
+            "nome": prodotto.strip(),
+            "lotto": "",
+            "unita": "kg",
+            "costo_unitario": 0.0,
+            "giacenza": 0.0
+        })
         idx = len(prodotti) - 1
 
-    giac = float(prodotti[idx].get("giacenza", 0))
-    giac += float(quantita)
-    prodotti[idx]["giacenza"] = giac
-    save_json(FILES["magazzino"], mag)
+    # aggiorna solo la giacenza del prodotto trovato/creato
+    prodotti[idx]["giacenza"] = float(prodotti[idx]["giacenza"]) + float(quantita)
 
-    # 2) scrivi movimento in resi.json
+    _save_magazzino_list(prodotti, wrap)
+
+    # registra il movimento reso
     resi = load_json(FILES["resi"])
     if not isinstance(resi, list):
         resi = []
     resi.append({
         "data": data_iso,
-        "prodotto": prodotto,
+        "prodotto": prodotti[idx]["nome"],
         "quantita": float(quantita),
         "operatore": operatore or "",
         "note": note or ""
     })
-    save_json(FILES["resi"], resi)        
+    save_json(FILES["resi"], resi)
 # --- LOG SEMPLICE ---
 import datetime
 def log(msg):
@@ -469,21 +499,8 @@ with tabs[1]:
 st.divider()
 st.subheader("Bolla di reso")
 
-raw = load_json(FILES["magazzino"])
-
-# Normalizza a lista di prodotti (supporta entrambi i formati)
-if isinstance(raw, dict):
-    prodotti = raw.get("prodotti", [])
-elif isinstance(raw, list):
-    prodotti = raw
-else:
-    prodotti = []
-
-# Prende il nome indipendentemente dal campo usato
-def _nome(p):
-    return str(p.get("prodotto") or p.get("nome") or "").strip()
-
-nomi_prodotti = [_nome(p) for p in prodotti if _nome(p)]
+prodotti_ui, _wrap = _load_magazzino_list()
+nomi_prodotti = [p["nome"] for p in prodotti_ui if p.get("nome")]
 
 with st.form("form_reso", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
