@@ -493,8 +493,21 @@ with tabs[1]:
 st.divider()
 st.subheader("Bolla di reso")
 
-prodotti_ui, _wrap = _load_magazzino_list()
-nomi_prodotti = [p["nome"] for p in prodotti_ui if p.get("nome")]
+raw = load_json(FILES["magazzino"])
+
+# Normalizza la lista di prodotti (supporta entrambi i formati)
+if isinstance(raw, dict):
+    prodotti = raw.get("prodotti", [])
+elif isinstance(raw, list):
+    prodotti = raw
+else:
+    prodotti = []
+
+# Prende il nome indipendentemente dal campo usato
+def _nome(p):
+    return str(p.get("prodotto") or p.get("nome") or "").strip()
+
+nomi_prodotti = [_nome(p) for p in prodotti if _nome(p)]
 
 with st.form("form_reso", clear_on_submit=True):
     col1, col2, col3 = st.columns(3)
@@ -506,13 +519,6 @@ with st.form("form_reso", clear_on_submit=True):
         prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else prodotto_sel
     with col3:
         quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=1.0)
-        # scegli se il reso aumenta (+) o diminuisce (-) il magazzino
-        tipo_reso = st.selectbox(
-            "Tipo reso",
-            ["Rientro da campo (+ magazzino)", "Reso a fornitore (- magazzino)"],
-            index=0, key="m_tipo_reso"
-        )
-        segno = 1 if "Rientro" in tipo_reso else -1
 
     col4, col5 = st.columns(2)
     with col4:
@@ -520,19 +526,20 @@ with st.form("form_reso", clear_on_submit=True):
     with col5:
         note_reso = st.text_input("Note", value="")
 
-    if st.form_submit_button("✔ Registra reso"):
+    st.caption("Il reso aggiornerà automaticamente la giacenza del magazzino.")
+
+    if st.form_submit_button("✓ Registra reso"):
         if not prodotto_finale or float(quantita_reso) <= 0:
             st.error("Inserisci un prodotto valido e una quantità > 0.")
         else:
             registra_reso(
                 prodotto=prodotto_finale,
-                quantita=quantita_reso,
+                quantita=-abs(quantita_reso),  # toglie dal magazzino
                 data_iso=str(data_reso),
                 operatore=operatore_reso,
-                note=note_reso,
-                segno=segno
+                note=note_reso
             )
-            st.success(f"Reso registrato: +{quantita_reso} a magazzino per '{prodotto_finale}'.")
+            st.success(f"Reso registrato: -{quantita_reso} dal magazzino per '{prodotto_finale}' ✅")
             st.rerun()
 
 # elenco resi registrati (utile per verifica)
