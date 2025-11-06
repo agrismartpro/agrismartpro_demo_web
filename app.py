@@ -126,7 +126,8 @@ def registra_reso(nome, lotto, unita, quantita, data_iso, operatore, note, segno
     if nuova < 0:
         nuova = 0.0  # evita valori negativi
     prod_list[idx]["giacenza"] = nuova
-
+    # NON toccare il costo nei resi
+    prod_list[idx]["costo_unitario"] = float(prod_list[idx].get("costo_unitario", 0.0))
     # --- Salva il magazzino aggiornato ---
     _save_magazzino_list(prod_list, wrap)
 
@@ -486,24 +487,30 @@ with tabs[1]:
         if st.button("Salva magazzino", key="m_salva"):
 
             esistente_idx = _find_index(dati, prodotto, lotto, unita)
-
+        
             voce = {
-                "prodotto": prodotto.strip(),
-                "lotto": lotto.strip(),
-                "unita": unita,
-                "giacenza": giacenza,
-                "costo_unitario": costo
+                "nome":           (prodotto or "").strip(),
+                "prodotto":       (prodotto or "").strip(),  # compatibilità vecchi record
+                "lotto":          (lotto or "").strip(),
+                "unita":          (unita or "").strip(),
+                "giacenza":       float(giacenza or 0),
+                "costo_unitario": float(costo or 0),
             }
-
+        
             if esistente_idx is None:
                 dati.append(voce)
             else:
                 if azione == "Aggiungi":
-                    dati[esistente_idx]["giacenza"] = float(dati[esistente_idx].get("giacenza", 0)) + float(giacenza)
-                    if costo:
-                        dati[esistente_idx]["costo_unitario"] = costo
-                else:  # Sostituisci/aggiorna
-                    dati[esistente_idx] = voce
+                    dati[esistente_idx]["giacenza"] = float(dati[esistente_idx].get("giacenza", 0)) + float(giacenza or 0)
+                    if float(costo or 0) > 0:
+                        dati[esistente_idx]["costo_unitario"] = float(costo)
+                else:  # "Sostituisci/aggiorna"
+                    dati[esistente_idx]["lotto"] = (lotto or "").strip()
+                    dati[esistente_idx]["unita"] = (unita or "").strip()
+                    if giacenza is not None:
+                        dati[esistente_idx]["giacenza"] = float(giacenza or 0)
+                    if costo is not None and costo != "":
+                        dati[esistente_idx]["costo_unitario"] = float(costo or 0)
 
             save_json(FILES["magazzino"], dati)
             st.success("Voce di magazzino salvata!")
