@@ -547,65 +547,57 @@ with tabs[1]:
             st.success("Campi puliti ✅")
             st.rerun()
 # --- BOLLA DI RESO ---
-st.divider()
-st.subheader("Bolla di reso")
+    st.divider()
+    st.subheader("Bolla di reso")
 
-# Carica il magazzino aggiornato
-try:
-    prodotti, wrap = load_magazzino_list()
-except Exception as e:
-    st.error(f"Errore nel caricamento del magazzino per il reso: {e}")
-    prodotti, wrap = [], False
+    # Carica magazzino aggiornato
+    try:
+        prodotti, wrap = load_magazzino_list()
+    except Exception:
+        prodotti, wrap = [], False
 
-if not prodotti:
-    st.info("Nessun prodotto in magazzino per registrare un reso.")
-else:
+    if prodotti:
+        def _label_reso(p):
+            nome = p.get("nome") or p.get("prodotto") or ""
+            lotto = p.get("lotto") or ""
+            unita = p.get("unita") or ""
+            giac = p.get("giacenza") or 0
+            return f"{nome} | Lotto: {lotto} | {unita} | Giacenza: {giac}"
 
-    def _label_reso(p):
-        nome = p.get("nome") or p.get("prodotto") or ""
-        lotto = p.get("lotto") or ""
-        unita = p.get("unita") or ""
-        giac = p.get("giacenza") or 0
-        return f"{nome} | Lotto: {lotto} | {unita} | Giacenza: {giac}"
+        etichette = [_label_reso(p) for p in prodotti]
+        mappa = { _label_reso(p): p for p in prodotti }
 
-    etichette = [_label_reso(p) for p in prodotti]
-    mappa = { _label_reso(p): p for p in prodotti }
+        with st.form("form_reso", clear_on_submit=True):
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                data_reso = st.date_input("Data reso")
+            with col2:
+                etichetta_sel = st.selectbox("Prodotto", etichette)
+            with col3:
+                quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=0.5)
 
-    with st.form("form_reso", clear_on_submit=True):
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            data_reso = st.date_input("Data reso")
-        with col2:
-            etichetta_sel = st.selectbox("Prodotto", etichette)
-        with col3:
-            quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=0.5)
+            tipo_reso = st.radio(
+                "Tipo reso",
+                ["Reso a fornitore (-)", "Rientro da campo (+ magazzino)"],
+                horizontal=True
+            )
+            operatore_reso = st.text_input("Operatore", value="")
+            note_reso = st.text_input("Note", value="")
 
-        tipo_reso = st.radio(
-            "Tipo reso",
-            ["Reso a fornitore (-)", "Rientro da campo (+ magazzino)"],
-            horizontal=True
-        )
+            invia = st.form_submit_button("✔ Registra reso")
 
-        operatore_reso = st.text_input("Operatore", value="")
-        note_reso = st.text_input("Note", value="")
-
-        invia = st.form_submit_button("✔ Registra reso")
-
-    if invia:
-        if quantita_reso <= 0:
-            st.error("Inserisci una quantità di reso maggiore di 0.")
-        else:
-            # Prende il record vero dal magazzino
+        if invia:
             rec = mappa.get(etichetta_sel, {})
             nome = (rec.get("nome") or rec.get("prodotto") or "").strip()
             lotto = (rec.get("lotto") or "").strip()
             unita = (rec.get("unita") or "").strip() or "kg"
+            segno = -1 if "Reso a fornitore" in tipo_reso else 1
 
             if not nome:
                 st.error("Impossibile identificare il prodotto selezionato.")
+            elif quantita_reso <= 0:
+                st.error("Inserisci una quantità maggiore di 0.")
             else:
-                segno = -1 if "Reso a fornitore" in tipo_reso else 1
-
                 try:
                     registra_reso(
                         nome=nome,
@@ -619,25 +611,29 @@ else:
                     )
                     st.success(
                         f"Reso registrato: "
-                        f"{'−' if segno == -1 else '+'}{quantita_reso} {unita} su {nome}"
+                        f"{'-' if segno == -1 else '+'}{quantita_reso} {unita} su {nome}"
                     )
-                    st.rerun()  # aggiorna subito il magazzino sopra
+                    st.rerun()
                 except Exception as e:
                     st.error(f"Errore durante il reso: {e}")
-                # --- Resi registrati (storico) ---
-                st.markdown("#### Resi registrati (storico)")
-            
-                try:
-                    resi = load_json(FILES["resi"])
-                except Exception:
-                    resi = []
-            
-                if isinstance(resi, list) and resi:
-                    # mostriamo solo i campi principali
-                    df_resi = pd.DataFrame(resi)[["data", "prodotto", "lotto", "quantita", "operatore", "note"]]
-                    st.dataframe(df_resi, use_container_width=True)
-                else:
-                    st.caption("Nessun reso registrato.")                    
+    else:
+        st.caption("Nessun prodotto in magazzino per registrare un reso.")
+
+    # --- RESI REGISTRATI (sempre visibile) ---
+    st.markdown("#### Resi registrati (storico)")
+
+    try:
+        resi = load_json(FILES["resi"])
+    except Exception:
+        resi = []
+
+    if isinstance(resi, list) and resi:
+        cols = ["data", "prodotto", "lotto", "quantita", "operatore", "note"]
+        df_resi = pd.DataFrame(resi)
+        df_resi = df_resi[[c for c in cols if c in df_resi.columns]]
+        st.dataframe(df_resi, use_container_width=True)
+    else:
+        st.caption("Nessun reso registrato.")                   
 # --- Fertilizzazioni ---
 with tabs[2]:
     st.subheader("Registro fertilizzazioni")
