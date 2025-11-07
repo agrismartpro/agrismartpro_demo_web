@@ -550,95 +550,80 @@ with tabs[1]:
 st.divider()
 st.subheader("Bolla di reso")
 
-raw = load_json(FILES["magazzino"])
+# Carica il magazzino aggiornato
+try:
+    prodotti, wrap = load_magazzino_list()
+except Exception as e:
+    st.error(f"Errore nel caricamento del magazzino per il reso: {e}")
+    prodotti, wrap = [], False
 
-# Normalizza la lista di prodotti (supporta entrambi i formati)
-if isinstance(raw, dict):
-    prodotti = raw.get("prodotti", [])
-elif isinstance(raw, list):
-    prodotti = raw
+if not prodotti:
+    st.info("Nessun prodotto in magazzino per registrare un reso.")
 else:
-    prodotti = []
 
-# Prende il nome indipendentemente dal campo usato
-def _nome(p):
-    return str(p.get("prodotto") or p.get("nome") or "").strip()
+    def _label_reso(p):
+        nome = p.get("nome") or p.get("prodotto") or ""
+        lotto = p.get("lotto") or ""
+        unita = p.get("unita") or ""
+        giac = p.get("giacenza") or 0
+        return f"{nome} | Lotto: {lotto} | {unita} | Giacenza: {giac}"
 
-def _label_prodotto(p):
-    nome = p.get("prodotto") or p.get("nome") or ""
-    lotto = p.get("lotto") or ""
-    unita = p.get("unita") or ""
-    giac = p.get("giacenza") or 0
-    return f"{nome} | Lotto: {lotto} | {unita} | Giacenza: {giac}"
+    etichette = [_label_reso(p) for p in prodotti]
+    mappa = { _label_reso(p): p for p in prodotti }
 
-etichette_prodotti = [_label_prodotto(p) for p in prodotti]
+    with st.form("form_reso", clear_on_submit=True):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            data_reso = st.date_input("Data reso")
+        with col2:
+            etichetta_sel = st.selectbox("Prodotto", etichette)
+        with col3:
+            quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=0.5)
 
-with st.form("form_reso", clear_on_submit=True):
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        data_reso = st.date_input("Data reso")
-    with col2:
-        prodotto_sel = st.selectbox("Prodotto", options=(etichette_prodotti or ["(scrivi nome nuovo)"]))
-        nuovo_nome = st.text_input("Oppure inserisci nome", value="")
-        
-        # 🔹 Estrae solo il nome reale dal record selezionato
-        rec_sel = next((p for p in prodotti if _label_prodotto(p) == prodotto_sel), {})
-        nome_reale = rec_sel.get("nome") or rec_sel.get("prodotto") or ""
-        
-        # 🔹 Sceglie il nome finale corretto
-        prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else nome_reale.strip()
-    with col3:
-        quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=1.0)
-    # --- Tipo reso (decide se + o -) ---
-    tipo_reso = st.selectbox(
-        "Tipo reso",
-        ["Rientro da campo (+ magazzino)", "Reso a fornitore (- magazzino)"],
-        index=0,
-        key="m_tipo_reso",
-    )
-    
-    segno = +1 if "Rientro" in tipo_reso else -1
-    col4, col5 = st.columns(2)
-    with col4:
+        tipo_reso = st.radio(
+            "Tipo reso",
+            ["Reso a fornitore (-)", "Rientro da campo (+ magazzino)"],
+            horizontal=True
+        )
+
         operatore_reso = st.text_input("Operatore", value="")
-    with col5:
         note_reso = st.text_input("Note", value="")
 
-    st.caption("Il reso aggiornerà automaticamente la giacenza del magazzino.")
+        invia = st.form_submit_button("✔ Registra reso")
 
-    if st.form_submit_button("✓ Registra reso"):
-        if not prodotto_finale or float(quantita_reso) <= 0:
-            st.error("Inserisci un prodotto valido e una quantità > 0.")
+    if invia:
+        if quantita_reso <= 0:
+            st.error("Inserisci una quantità di reso maggiore di 0.")
         else:
-            # mappa etichetta -> record originale per estrarre lotto/unita
-            mappa = { _label_prodotto(p): p for p in prodotti }
-        
-            # prendi il record selezionato (se esiste)
-            rec_sel = mappa.get(prodotto_sel, {})
-            nome = (nuovo_nome.strip() if nuovo_nome.strip() else rec_sel.get("nome", prodotto_sel).strip())
-            lotto = rec_sel.get("lotto", "")
-            unita = rec_sel.get("unita", "kg")
-        
-            registra_reso(
-                nome=nome,
-                lotto=lotto,
-                unita=unita,
-                quantita=quantita_reso,
-                data_iso=str(data_reso),
-                operatore=operatore_reso,
-                note=note_reso,
-                segno=segno   # +1 rientro, -1 reso a fornitore
-            )
-            st.success(f"Reso registrato: {('+' if segno>0 else '')}{quantita_reso} su '{nome}' (lotto {lotto}, {unita}).")
-            st.rerun()
+            # Prende il record vero dal magazzino
+            rec = mappa.get(etichetta_sel, {})
+            nome = (rec.get("nome") or rec.get("prodotto") or "").strip()
+            lotto = (rec.get("lotto") or "").strip()
+            unita = (rec.get("unita") or "").strip() or "kg"
 
-# elenco resi registrati (utile per verifica)
-st.caption("Resi registrati")
-try:
-    import pandas as pd
-    st.dataframe(pd.DataFrame(load_json(FILES["resi"])), use_container_width=True)
-except Exception:
-    st.write(load_json(FILES["resi"]))
+            if not nome:
+                st.error("Impossibile identificare il prodotto selezionato.")
+            else:
+                segno = -1 if "Reso a fornitore" in tipo_reso else 1
+
+                try:
+                    registra_reso(
+                        nome=nome,
+                        lotto=lotto,
+                        unita=unita,
+                        quantita=quantita_reso,
+                        data_iso=str(data_reso),
+                        operatore=operatore_reso,
+                        note=note_reso,
+                        segno=segno,
+                    )
+                    st.success(
+                        f"Reso registrato: "
+                        f"{'−' if segno == -1 else '+'}{quantita_reso} {unita} su {nome}"
+                    )
+                    st.rerun()  # aggiorna subito il magazzino sopra
+                except Exception as e:
+                    st.error(f"Errore durante il reso: {e}")
 # --- Fertilizzazioni ---
 with tabs[2]:
     st.subheader("Registro fertilizzazioni")
