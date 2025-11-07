@@ -98,7 +98,13 @@ def _save_magazzino_list(prod_list, wrap):
     if wrap:
         save_json(FILES["magazzino"], {"prodotti": prod_list})
     else:
-        save_json(FILES["magazzino"], prod_list)        
+        save_json(FILES["magazzino"], prod_list)
+# Alias senza underscore per usarle nel resto dell'app
+def load_magazzino_list():
+    return _load_magazzino_list()
+
+def save_magazzino_list(prod_list, wrap):
+    return _save_magazzino_list(prod_list, wrap)        
 def registra_reso(nome, lotto, unita, quantita, data_iso, operatore, note, segno=1):
     """
     Registra un reso aggiornando la GIACENZA del prodotto giusto
