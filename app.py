@@ -393,31 +393,39 @@ st.title("🌾 AgriSmartPro – Demo Web (MVP)")
 # --- Hero Section ---
 st.markdown(
     """
-    <div style='text-align: center; padding: 40px 0; background: linear-gradient(180deg, #e8f5e9 0%, #ffffff 100%); border-radius: 10px;'>
-        <h1 style='color: #2e7d32; font-size: 42px; font-weight: 700;'>
+    <div style='text-align: center; padding: 40px 0; background: linear-gradient(180deg, #e8f5e9, #ffffff);'>
+        <h1 style='color: #2e7d32; font-size: 42px; font-weight: 700; margin-bottom: 8px;'>
             Gestione Agricola Intelligente
         </h1>
         <p style='font-size: 20px; color: #333;'>
             Ottimizza i trattamenti, i fertilizzanti e il magazzino con AgriSmartPro AI
         </p>
         <div style='margin-top: 20px;'>
-            <a href='#' style='background-color:#2e7d32; color:white; padding:12px 24px; text-decoration:none; border-radius:6px; margin-right:10px;'>Inizia</a>
-            <a href='#export' style='background-color:#1e88e5; color:white; padding:12px 24px; text-decoration:none; border-radius:6px;'>Visualizza Demo</a>
+            <a href='#prezzi' style='background-color:#2e7d32; color:white; padding:12px 24px; text-decoration:none; border-radius:6px; margin-right:8px;'>
+                Vedi prezzi
+            </a>
+            <a href='#demo' style='background-color:#1e88e5; color:white; padding:12px 24px; text-decoration:none; border-radius:6px; margin-right:8px;'>
+                Prova la demo
+            </a>
+            <a href='#feedback' style='background-color:#eeeeee; color:#333; padding:12px 24px; text-decoration:none; border-radius:6px;'>
+                Lascia feedback
+            </a>
         </div>
     </div>
     """,
-    unsafe_allow_html=True
-    # 📘 Guida Rapida alla Prova
-    st.markdown(
-        "<div style='text-align:center; margin-top:20px;'>"
-        "📘 <b>Guida rapida alla prova</b><br>"
-        "<a href='https://drive.google.com/file/d/1k0KHArVxB-9ixfp5X7lPJFNHKCY_f5kG/view?usp=drive_link' target='_blank'>"
-        "👉 Scarica il PDF"
-        "</a>"
-        "</div>",
-        unsafe_allow_html=True,
-    )
+    unsafe_allow_html=True,
+)
 
+# 📘 Guida Rapida alla Prova
+st.markdown(
+    "<div style='text-align:center; margin-top:20px;'>"
+    "📘 <b>Guida rapida alla prova</b><br>"
+    "<a href='https://drive.google.com/file/d/1k0KHArVxB-9ixfp5X7lPJFNHKCY_f5kG/view?usp=drive_link' target='_blank'>"
+    "👉 Scarica il PDF"
+    "</a>"
+    "</div>",
+    unsafe_allow_html=True,
+)
 st.caption("Versione dimostrativa: gestione Trattamenti, Magazzino, Fertilizzazioni con salvataggio su file JSON locali.")
 
 tabs = st.tabs(["Trattamenti", "Magazzino", "Fertilizzazioni", "Impostazioni", "Export"])
