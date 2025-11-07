@@ -580,7 +580,13 @@ with st.form("form_reso", clear_on_submit=True):
     with col2:
         prodotto_sel = st.selectbox("Prodotto", options=(etichette_prodotti or ["(scrivi nome nuovo)"]))
         nuovo_nome = st.text_input("Oppure inserisci nome", value="")
-        prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else prodotto_sel.split("|")[0].strip()
+        
+        # 🔹 Estrae solo il nome reale dal record selezionato
+        rec_sel = next((p for p in prodotti if _label_prodotto(p) == prodotto_sel), {})
+        nome_reale = rec_sel.get("nome") or rec_sel.get("prodotto") or ""
+        
+        # 🔹 Sceglie il nome finale corretto
+        prodotto_finale = nuovo_nome.strip() if nuovo_nome.strip() else nome_reale.strip()
     with col3:
         quantita_reso = st.number_input("Quantità resa", min_value=0.0, step=1.0)
     # --- Tipo reso (decide se + o -) ---
