@@ -407,7 +407,9 @@ st.markdown(
             <a href='#demo' style='background-color:#1e88e5; color:white; padding:12px 24px; text-decoration:none; border-radius:6px; margin-right:8px;'>
                 Prova la demo
             </a>
-            <a href='#feedback' style='background-color:#eeeeee; color:#333; padding:12px 24px; text-decoration:none; border-radius:6px;'>
+            <a href='https://docs.google.com/forms/d/e/1FAIpQLScrYq2c45eqRSOM39MBotjd78jHkgRAcE7085r3d3gzBnFqvg/viewform'
+               target='_blank'
+               style='background-color:#eeeeee; color:#333; padding:12px 24px; text-decoration:none; border-radius:6px;'>
                 Lascia feedback
             </a>
         </div>
