@@ -624,6 +624,20 @@ else:
                     st.rerun()  # aggiorna subito il magazzino sopra
                 except Exception as e:
                     st.error(f"Errore durante il reso: {e}")
+                # --- Resi registrati (storico) ---
+                st.markdown("#### Resi registrati (storico)")
+            
+                try:
+                    resi = load_json(FILES["resi"])
+                except Exception:
+                    resi = []
+            
+                if isinstance(resi, list) and resi:
+                    # mostriamo solo i campi principali
+                    df_resi = pd.DataFrame(resi)[["data", "prodotto", "lotto", "quantita", "operatore", "note"]]
+                    st.dataframe(df_resi, use_container_width=True)
+                else:
+                    st.caption("Nessun reso registrato.")                    
 # --- Fertilizzazioni ---
 with tabs[2]:
     st.subheader("Registro fertilizzazioni")
