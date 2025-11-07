@@ -460,16 +460,21 @@ with tabs[0]:
 with tabs[1]:
     st.subheader("Magazzino fitosanitari/fertilizzanti")
 
-    raw_mag = load_json(FILES["magazzino"])
+    # 🔹 Usa sempre la funzione centralizzata
+    try:
+        prod_list, wrap = load_magazzino_list()
+    except Exception as e:
+        st.error(f"Errore nel caricamento del magazzino: {e}")
+        prod_list, wrap = [], False
 
-    # ✅ compatibilità tra formato desktop ({"prodotti": [...]}) e web (lista [])
-    if isinstance(raw_mag, dict):
-        dati = raw_mag.get("prodotti", [])
+    # questa lista 'dati' la usiamo anche sotto nei form
+    dati = prod_list
+
+    if dati:
+        df = pd.DataFrame(dati)
+        st.dataframe(df, use_container_width=True)
     else:
-        dati = raw_mag
-
-    df = pd.DataFrame(dati)
-    st.dataframe(df, use_container_width=True)
+        st.info("Magazzino vuoto per questa demo.")
     with st.expander("➕ Aggiungi/aggiorna voce di magazzino"):
         col1, col2, col3, col4 = st.columns(4)
         with col1:
