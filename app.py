@@ -422,7 +422,7 @@ st.markdown(
 st.markdown(
     "<div style='text-align:center; margin-top:20px;'>"
     "📘 <b>Guida rapida alla prova</b><br>"
-    "<a href='https://drive.google.com/file/d/1k0KHArVxB-9ixfp5X7lPJFNHKCY_f5kG/view?usp=drive_link' target='_blank'>"
+    "<a href='data/GuidaRapida_AgriSmartPro_VERDE.pdf' target='_blank'>
     "👉 Scarica il PDF"
     "</a>"
     "</div>",
