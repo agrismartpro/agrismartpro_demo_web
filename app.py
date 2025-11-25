@@ -419,16 +419,19 @@ st.markdown(
 )
 
 # Guida Rapida alla Prova
-st.markdown("""
-<div style='text-align:center; margin-top:20px;'>
-    <b>📘 Guida rapida alla prova</b><br>
-    <a href='GuidaRapida_AgriSmartPro_VERDE.pdf' target='_blank'
-       style='background-color:#2E8B57;color:white; padding:12px 24px;
-       text-decoration:none; border-radius:6px;'>
-       Scarica il PDF
-    </a>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("### 📘 Guida rapida alla prova")
+
+# Legge il PDF dal repository (stessa cartella di app.py)
+with open("GuidaRapida_AgriSmartPro_VERDE.pdf", "rb") as f:
+    pdf_data = f.read()
+
+# Bottone di download Streamlit
+st.download_button(
+    label="Scarica il PDF",
+    data=pdf_data,
+    file_name="GuidaRapida_AgriSmartPro_VERDE.pdf",
+    mime="application/pdf"
+)
 
 st.caption("Versione dimostrativa: gestione Trattamenti, Magazzino, Fertilizzazioni con salvataggio su file JSON locali.")
 
