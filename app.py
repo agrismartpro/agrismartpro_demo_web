@@ -429,7 +429,7 @@ st.markdown("""
     </a>
 </div>
 """, unsafe_allow_html=True)
-)
+
 st.caption("Versione dimostrativa: gestione Trattamenti, Magazzino, Fertilizzazioni con salvataggio su file JSON locali.")
 
 tabs = st.tabs(["Trattamenti", "Magazzino", "Fertilizzazioni", "Impostazioni", "Export"])
