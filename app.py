@@ -422,9 +422,9 @@ st.markdown(
 st.markdown(
     """
     <div style='text-align:center; margin-top:20px;'>
-        <b>📄 Guida rapida alla prova</b><br><br>
-        <a href='data/GuidaRapida_AgriSmartPro_VERDE.pdf' target='_blank'
-           style='background-color:#4caf50; color:white; padding:12px 24px; text-decoration:none; border-radius:6px;'>
+        <b>Guida rapida alla prova</b><br><br>
+        <a href='https://drive.google.com/file/d/1K0KHArVx8-9kfp5X7IPFNHKCY_5KG/view?usp=drive_link' target='_blank'
+           style='background-color:#2E8B57;color:white; padding:12px 24px; text-decoration:none; border-radius:6px;'>
             Scarica il PDF
         </a>
     </div>
