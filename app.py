@@ -391,27 +391,20 @@ def generate_fertilizzazioni_pdf(company, logo_path, rows):
     return out_path
 st.title("🍀 AgriSmartPro – Demo Web (MVP)")
 
-# --- Hero section semplice ma carina ---
-st.markdown("## 🌿 Gestione Agricola Intelligente")
+# Sezione principale semplice, senza HTML
+st.markdown("## Gestione Agricola Intelligente")
 
 st.markdown(
-    """
-Ottimizza *trattamenti, **fertilizzazioni* e *magazzino* con AgriSmartPro AI.
+    "Ottimizza i trattamenti, i fertilizzanti e il magazzino con *AgriSmartPro AI*."
+)
 
-> 🔎 Stai usando la **versione DEMO* di AgriSmartPro.*
-
-Puoi provare:
-
-- 📘 *Trattamenti*
-- 📦 *Magazzino*
-- 🌱 *Fertilizzazioni*
-
-I dati della demo vengono salvati solo *in locale sul tuo PC*.
-"""
+st.info(
+    "Stai usando la *versione DEMO di AgriSmartPro*. "
+    "Puoi provare subito Trattamenti, Magazzino e Fertilizzazioni con salvataggi locali sul tuo PC."
 )
 
 st.markdown(
-    "[💬 Lascia un feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
+    "[Lascia feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
 )
 
 st.markdown("---")
