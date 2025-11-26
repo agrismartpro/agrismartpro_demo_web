@@ -389,22 +389,27 @@ def generate_fertilizzazioni_pdf(company, logo_path, rows):
     out_path = os.path.join(DATA_DIR, "fertilizzazioni.pdf")
     pdf.output(out_path)
     return out_path
-st.title("🍀 AgriSmartPro – Demo Web (MVP)")
+st.title("AgriSmartPro – Demo Web (MVP)")
 
-# Sezione principale semplice, senza HTML
+# ---- Sezione introduttiva pulita e ordinata ----
 st.markdown("## Gestione Agricola Intelligente")
 
 st.markdown(
-    "Ottimizza i trattamenti, i fertilizzanti e il magazzino con *AgriSmartPro AI*."
-)
+    """
+AgriSmartPro ti permette di testare il quaderno di campagna in versione demo
+con una panoramica semplice delle funzioni principali.
 
-st.info(
-    "Stai usando la *versione DEMO di AgriSmartPro*. "
-    "Puoi provare subito Trattamenti, Magazzino e Fertilizzazioni con salvataggi locali sul tuo PC."
+### Cosa puoi provare:
+- *Trattamenti*
+- *Magazzino*
+- *Fertilizzazioni*
+
+Questa è una *versione dimostrativa: i dati inseriti servono solo a testare le funzioni e **non vengono salvati in modo permanente*.
+"""
 )
 
 st.markdown(
-    "[Lascia feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
+    "[Lascia un feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
 )
 
 st.markdown("---")
