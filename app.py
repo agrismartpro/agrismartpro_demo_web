@@ -389,30 +389,25 @@ def generate_fertilizzazioni_pdf(company, logo_path, rows):
     out_path = os.path.join(DATA_DIR, "fertilizzazioni.pdf")
     pdf.output(out_path)
     return out_path
-st.title("🌾 AgriSmartPro – Demo Web (MVP)")
-# --- Hero Section ---
-st.markdown("""
-<div style='text-align: center; padding: 40px 0; background: linear-gradient(180deg, #e8f5e9, #ffffff);'>
-    <h1 style="color:#2e7d32; font-size: 42px; font-weight: 700; margin-bottom: 8px;">
-        Gestione Agricola Intelligente
-    </h1>
+st.title("🍀 AgriSmartPro – Demo Web (MVP)")
 
-    <p style="font-size: 20px; color: #333;">
-        Ottimizza i trattamenti, i fertilizzanti e il magazzino con AgriSmartPro AI
-    </p>
+# Sezione principale semplice, senza HTML
+st.markdown("## Gestione Agricola Intelligente")
 
-    <p style="font-size:14px; color:#444; max-width:650px; margin:0 auto 12px auto;">
-        Stai usando la <strong>versione DEMO di AgriSmartPro</strong>.
-        Puoi provare subito Trattamenti, Magazzino e Fertilizzazioni con salvataggi locali sul tuo pc.
-    </p>
+st.markdown(
+    "Ottimizza i trattamenti, i fertilizzanti e il magazzino con *AgriSmartPro AI*."
+)
 
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqS RQM3P0Bt d7d3 jHkgPAcE7085S3d3zBn6vvQ/viewform"
-       target="_blank"
-       style="background-color:#eeeeee; color:#333; padding:12px 24px; text-decoration:none; border-radius:6px; display:inline-block;">
-       Lascia feedback
-    </a>
-</div>
-""", unsafe_allow_html=True)
+st.info(
+    "Stai usando la *versione DEMO di AgriSmartPro*. "
+    "Puoi provare subito Trattamenti, Magazzino e Fertilizzazioni con salvataggi locali sul tuo PC."
+)
+
+st.markdown(
+    "[Lascia feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
+)
+
+st.markdown("---")
 
 # Guida Rapida alla Prova
 st.markdown("### 📘 Guida rapida alla prova")
