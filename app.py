@@ -400,18 +400,17 @@ st.markdown(
         <p style='font-size: 20px; color: #333;'>
             Ottimizza i trattamenti, i fertilizzanti e il magazzino con AgriSmartPro AI
         </p>
-        <div style='margin-top: 20px;'>
-            <a href='#prezzi' style='background-color:#2e7d32; color:white; padding:12px 24px; text-decoration:none; border-radius:6px; margin-right:8px;'>
-                Vedi prezzi
-            </a>
-            <a href='#demo' style='background-color:#1e88e5; color:white; padding:12px 24px; text-decoration:none; border-radius:6px; margin-right:8px;'>
-                Prova la demo
-            </a>
-            <a href='https://docs.google.com/forms/d/e/1FAIpQLScrYq2c45eqRSOM39MBotjd78jHkgRAcE7085r3d3gzBnFqvg/viewform'
-               target='_blank'
-               style='background-color:#eeeeee; color:#333; padding:12px 24px; text-decoration:none; border-radius:6px;'>
-                Lascia feedback
-            </a>
+        <div style="margin-top: 20px;">
+          <p style="font-size:14px; color:#444; max-width:650px;">
+            Stai usando la <strong>versione DEMO di AgriSmartPro</strong>. 
+            Puoi provare subito Trattamenti, Magazzino e Fertilizzazioni con salvataggi locali sul tuo pc.
+          </p>
+        
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvg/viewform"
+             target="_blank"
+             style="background-color:#eeeeee; color:#333; padding:12px 24px; text-decoration:none; border-radius:6px; display:inline-block; margin-top:8px;">
+            Lascia feedback
+          </a>
         </div>
     </div>
     """,
