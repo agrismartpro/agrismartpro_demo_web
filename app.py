@@ -391,45 +391,30 @@ def generate_fertilizzazioni_pdf(company, logo_path, rows):
     return out_path
 st.title("🍀 AgriSmartPro – Demo Web (MVP)")
 
-# ---- Hero Section elegante ma semplice ----
+# --- Hero section semplice ma carina ---
+st.markdown("## 🌿 Gestione Agricola Intelligente")
 
 st.markdown(
     """
-    <div style='text-align:center; padding:30px 0; border-radius:12px;
-                background: linear-gradient(180deg, #e9f7ef, #ffffff);
-                box-shadow:0px 2px 8px rgba(0,0,0,0.06);'>
-        <h1 style='color:#2e7d32; font-size:38px; font-weight:700; margin-bottom:6px;'>
-            Gestione Agricola Intelligente
-        </h1>
+Ottimizza *trattamenti, **fertilizzazioni* e *magazzino* con AgriSmartPro AI.
 
-        <p style='font-size:18px; color:#444; margin-top:0;'>
-            Ottimizza trattamenti, fertilizzanti e magazzino con <strong>AgriSmartPro AI</strong>
-        </p>
+> 🔎 Stai usando la **versione DEMO* di AgriSmartPro.*
 
-        <div style='max-width:600px; margin:20px auto; text-align:left;'>
-            <p style='font-size:15px; color:#2e7d32; margin-bottom:4px;'>
-                <strong>✔ Stai usando la versione DEMO</strong>
-            </p>
-            <ul style='font-size:15px; color:#444; line-height:1.5;'>
-                <li>📘 Trattamenti</li>
-                <li>📦 Magazzino</li>
-                <li>🌱 Fertilizzazioni</li>
-            </ul>
-            <p style='font-size:14px; color:#777;'>
-                I dati vengono salvati localmente sul tuo PC.
-            </p>
-        </div>
+Puoi provare:
 
-        <a href='https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform'
-           target='_blank'
-           style='background:#eeeeee; color:#333; padding:10px 18px;
-                  border-radius:6px; text-decoration:none; font-size:15px;'>
-            Lascia un feedback
-        </a>
-    </div>
-    """,
-    unsafe_allow_html=True
+- 📘 *Trattamenti*
+- 📦 *Magazzino*
+- 🌱 *Fertilizzazioni*
+
+I dati della demo vengono salvati solo *in locale sul tuo PC*.
+"""
 )
+
+st.markdown(
+    "[💬 Lascia un feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
+)
+
+st.markdown("---")
 # Guida Rapida alla Prova
 st.markdown("### 📘 Guida rapida alla prova")
 
