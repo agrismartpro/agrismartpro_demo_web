@@ -409,7 +409,7 @@ Questa è una *versione dimostrativa: i dati inseriti servono solo a testare le 
 )
 
 st.markdown(
-    "[Lascia un feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtdJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
+    "[Lascia feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
 )
 
 st.markdown("---")
