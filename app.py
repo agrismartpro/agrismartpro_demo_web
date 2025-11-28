@@ -409,7 +409,26 @@ Questa è una *versione dimostrativa: i dati inseriti servono solo a testare le 
 )
 
 st.markdown(
-    "[Lascia feedback sulla demo](https://docs.google.com/forms/d/e/1FAIpQLScrYq2c4SeqSRQM3P0BtJ7d8jHkgPAcE7085S3d3zBn6vvQ/viewform)"
+    """
+    <div style="padding:1.2rem; border-radius:12px; border:1px solid #2E8B57;
+                background-color:#f7fff9; margin-top:1.5rem; margin-bottom:0.5rem;">
+      <h4 style="margin:0 0 0.5rem 0; color:#2E8B57;">
+        💬 Lascia il tuo feedback sulla Demo Web
+      </h4>
+      <p style="margin:0 0 0.8rem 0; font-size:0.95rem;">
+        Il tuo parere ci aiuta a migliorare AgriSmartPro prima del lancio ufficiale.
+      </p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScrYq2c45eqRSOM39MBotjd78jHkgRAcE7085r3d3gzBnFqvg/viewform?usp=header"
+         target="_blank" style="text-decoration:none;">
+         <div style="display:inline-block; padding:0.6rem 1.2rem; border-radius:999px;
+                     background-color:#2E8B57; color:white; font-weight:600;
+                     font-size:0.95rem;">
+            ✍ Compila il modulo di feedback
+         </div>
+      </a>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 st.markdown("---")
