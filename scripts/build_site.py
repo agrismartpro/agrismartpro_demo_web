@@ -41,6 +41,24 @@ def build_auth_links(config: dict) -> str:
     return "\n".join(links)
 
 
+def build_plan_cards(config: dict) -> str:
+    cards: list[str] = []
+    for plan in config["plans"]:
+        cards.append(
+            "\n".join(
+                [
+                    '<article class="plan-card">',
+                    f'  <p class="eyebrow">{html.escape(plan["status"])}</p>',
+                    f'  <h2>{html.escape(plan["name"])}</h2>',
+                    f'  <p>{html.escape(plan["description"])}</p>',
+                    f'  <a class="text-link" href="{html.escape(plan["cta_url"], quote=True)}">{html.escape(plan["cta_label"])} <span aria-hidden="true">→</span></a>',
+                    "</article>",
+                ]
+            )
+        )
+    return "\n".join(cards)
+
+
 def build() -> None:
     config = load_json(ROOT / "site_config.json")
     pages = load_json(SITE / "pages.json")
@@ -59,6 +77,15 @@ def build() -> None:
         output = ROOT / "index.html" if not slug else ROOT / slug / "index.html"
         output.parent.mkdir(parents=True, exist_ok=True)
         canonical = config["site_url"].rstrip("/") + ("/" if not slug else f"/{slug}/")
+        content = replace(
+            source.read_text(encoding="utf-8"),
+            {
+                "DEMO_REQUEST_URL": html.escape(config["demo_request_url"], quote=True),
+                "PILOT_REQUEST_URL": html.escape(config["pilot_request_url"], quote=True),
+                "CONTACT_EMAIL": html.escape(config["contact_email"]),
+                "PLAN_CARDS": build_plan_cards(config),
+            },
+        )
         rendered = replace(
             base,
             {
@@ -67,7 +94,7 @@ def build() -> None:
                 "CANONICAL_URL": html.escape(canonical, quote=True),
                 "SITE_URL": html.escape(config["site_url"].rstrip("/"), quote=True),
                 "HEADER": header,
-                "CONTENT": source.read_text(encoding="utf-8"),
+                "CONTENT": content,
                 "FOOTER": footer,
             },
         )
