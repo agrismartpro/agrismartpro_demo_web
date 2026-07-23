@@ -1,0 +1,15 @@
+{
+  "name": "AgriSmartPro",
+  "short_name": "AgriSmartPro",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#fffefa",
+  "theme_color": "#173f2b",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    }
+  ]
+}

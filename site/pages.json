@@ -1,0 +1,14 @@
+[
+  {"slug": "", "source": "home.html", "title": "AgriSmartPro — La tua azienda agricola, finalmente chiara", "description": "Gestisci campi, attività, magazzino e registri agricoli in un unico spazio semplice e tracciabile."},
+  {"slug": "funzionalita", "source": "funzionalita.html", "title": "Funzionalità — AgriSmartPro", "description": "Scopri le funzioni disponibili, in validazione e pianificate di AgriSmartPro."},
+  {"slug": "centro-conformita", "source": "centro-conformita.html", "title": "Centro Conformità — AgriSmartPro", "description": "Il progetto del Centro Conformità AgriSmartPro: controlli spiegabili, fonti versionate e responsabilità chiare."},
+  {"slug": "catalogo-regolatorio", "source": "catalogo-regolatorio.html", "title": "Catalogo Regolatorio — AgriSmartPro", "description": "Come AgriSmartPro prepara dati regolatori tracciabili e versionati da fonti ufficiali."},
+  {"slug": "customer-zero", "source": "customer-zero.html", "title": "Customer Zero e programma pilota — AgriSmartPro", "description": "Il programma di validazione sul campo di AgriSmartPro con aziende agricole reali."},
+  {"slug": "prezzi", "source": "prezzi.html", "title": "Prezzi — AgriSmartPro", "description": "Piani commerciali AgriSmartPro in definizione e programma pilota su candidatura."},
+  {"slug": "chi-siamo", "source": "chi-siamo.html", "title": "Chi siamo — AgriSmartPro", "description": "Origine, principi e visione imprenditoriale di AgriSmartPro."},
+  {"slug": "faq", "source": "faq.html", "title": "Domande frequenti — AgriSmartPro", "description": "Risposte chiare sul funzionamento, sui dati e sul programma pilota AgriSmartPro."},
+  {"slug": "contatti", "source": "contatti.html", "title": "Contatti — AgriSmartPro", "description": "Richiedi una demo o informazioni sul programma pilota AgriSmartPro."},
+  {"slug": "privacy", "source": "privacy.html", "title": "Privacy Policy — AgriSmartPro", "description": "Informativa sul trattamento dei dati personali AgriSmartPro."},
+  {"slug": "termini", "source": "termini.html", "title": "Termini di utilizzo — AgriSmartPro", "description": "Termini di utilizzo della versione attuale di AgriSmartPro."},
+  {"slug": "cookie", "source": "cookie.html", "title": "Cookie Policy — AgriSmartPro", "description": "Informazioni sugli strumenti tecnici utilizzati da AgriSmartPro."}
+]
