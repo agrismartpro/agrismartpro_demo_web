@@ -11,6 +11,6 @@ python3 scripts/build_site.py
 python3 -m http.server 8080
 ```
 
-La configurazione dei collegamenti verso Accesso, Registrazione e richiesta
-demo si trova in `site_config.json`. I collegamenti applicativi restano assenti
-finché non sono stati collaudati e approvati.
+La configurazione dei canali per richiedere una demo o informazioni sul
+programma pilota si trova in `site_config.json`. Il sito pubblico non espone
+collegamenti diretti all'applicazione, all'accesso o alla registrazione.

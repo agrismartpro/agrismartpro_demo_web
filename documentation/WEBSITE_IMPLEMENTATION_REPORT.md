@@ -47,8 +47,8 @@ Il tag non è stato pubblicato.
 
 ## Collegamenti applicativi
 
-`app_login_url` e `app_registration_url` sono `null`. I pulsanti non vengono
-generati finché gli URL non sono collaudati.
+Nessun URL applicativo, di login, registrazione o Pilot viene configurato o
+generato: le richieste di accesso passano dal canale pubblico di contatto.
 
 ## Richiesta demo
 

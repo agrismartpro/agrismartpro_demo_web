@@ -24,6 +24,9 @@ PROHIBITED = (
     "azienda agricola de carli",
     "gianfranco",
     "+39 339 384 7035",
+    "run.app",
+    "streamlit.app",
+    "accedi al pilot",
 )
 FORBIDDEN_QUERY_KEYS = {"company_id", "tenant_id", "plan_id", "price_id"}
 

@@ -28,18 +28,13 @@ def replace(template: str, values: dict[str, str]) -> str:
     return rendered
 
 
-def build_auth_links(config: dict) -> str:
-    links: list[str] = []
-    if config.get("app_login_url"):
-        links.append(
-            f'<a class="nav-login" href="{html.escape(config["app_login_url"], quote=True)}" '
-            'title="Accesso riservato agli utenti Pilot già autorizzati">Accedi al Pilot</a>'
-        )
-    if config.get("app_registration_url"):
-        links.append(
-            f'<a class="button button-small" href="{html.escape(config["app_registration_url"], quote=True)}">Registrati</a>'
-        )
-    return "\n".join(links)
+def build_pilot_request_link(config: dict) -> str:
+    """Expose only the contact channel, never an application entry point."""
+    return (
+        f'<a class="nav-login" href="{html.escape(config["pilot_request_url"], quote=True)}" '
+        'title="Richiedi informazioni sul programma pilota">'
+        'Richiedi accesso al programma pilota</a>'
+    )
 
 
 def build_plan_cards(config: dict) -> str:
@@ -66,7 +61,7 @@ def build() -> None:
     base = (TEMPLATES / "base.html").read_text(encoding="utf-8")
     header = replace(
         (TEMPLATES / "header.html").read_text(encoding="utf-8"),
-        {"AUTH_LINKS": build_auth_links(config)},
+        {"AUTH_LINKS": build_pilot_request_link(config)},
     )
     footer = (TEMPLATES / "footer.html").read_text(encoding="utf-8")
 
