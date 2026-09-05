@@ -1,0 +1,6 @@
+exclude:
+  - documentation
+  - README.md
+  - scripts
+  - site
+  - site_config.json

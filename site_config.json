@@ -2,7 +2,7 @@
   "site_name": "AgriSmartPro",
   "site_url": "https://www.agrismartpro.com",
   "contact_email": "info@agrismartpro.com",
-  "app_login_url": null,
+  "app_login_url": "https://agrismartpro-pilot-804710782441.europe-west8.run.app/",
   "app_registration_url": null,
   "demo_request_url": "mailto:info@agrismartpro.com?subject=Richiesta%20demo%20AgriSmartPro",
   "pilot_request_url": "mailto:info@agrismartpro.com?subject=Candidatura%20programma%20pilota%20AgriSmartPro",
@@ -19,7 +19,7 @@
       "code": "future_plans",
       "name": "Piani commerciali",
       "status": "In definizione",
-      "description": "Le configurazioni commerciali saranno pubblicate dopo la validazione Customer Zero.",
+      "description": "Le configurazioni commerciali saranno pubblicate dopo la validazione del programma pilota.",
       "cta_label": "Parliamone",
       "cta_url": "mailto:info@agrismartpro.com?subject=Informazioni%20piani%20AgriSmartPro"
     }

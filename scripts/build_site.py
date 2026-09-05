@@ -32,7 +32,8 @@ def build_auth_links(config: dict) -> str:
     links: list[str] = []
     if config.get("app_login_url"):
         links.append(
-            f'<a class="nav-login" href="{html.escape(config["app_login_url"], quote=True)}">Accedi</a>'
+            f'<a class="nav-login" href="{html.escape(config["app_login_url"], quote=True)}" '
+            'title="Accesso riservato agli utenti Pilot già autorizzati">Accedi al Pilot</a>'
         )
     if config.get("app_registration_url"):
         links.append(
